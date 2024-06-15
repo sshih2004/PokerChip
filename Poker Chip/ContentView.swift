@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State var name: String = ""
+    @ObservedObject var server = PeerListener()
+    @ObservedObject var client = PeerBrowser()
     var body: some View {
         List {
             Section("HOST GAME") {
@@ -18,6 +20,7 @@ struct ContentView: View {
                         .multilineTextAlignment(.trailing)
                 }
                 Button {
+                    server.startListening()
                     
                 } label: {
                     HStack {
@@ -29,7 +32,7 @@ struct ContentView: View {
             }
             Section("JOIN GAME") {
                 Button {
-                    
+                    client.startBrowsing()
                 } label: {
                     HStack {
                         Spacer()

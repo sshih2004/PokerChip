@@ -16,6 +16,7 @@
 		E4D75AA62C1E2D69004D0FD8 /* PeerListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AA52C1E2D69004D0FD8 /* PeerListener.swift */; };
 		E4D75AB42C1E391C004D0FD8 /* PeerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */; };
 		E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */; };
+		E4D75AB82C1E4A37004D0FD8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		E4D75AA52C1E2D69004D0FD8 /* PeerListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerListener.swift; sourceTree = "<group>"; };
 		E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerBrowser.swift; sourceTree = "<group>"; };
 		E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEasyView.swift; sourceTree = "<group>"; };
+		E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 		E4D75A8B2C1DE388004D0FD8 /* Poker Chip */ = {
 			isa = PBXGroup;
 			children = (
+				E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */,
 				E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */,
 				E4D75AA32C1E2D50004D0FD8 /* Networking */,
 				E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */,
@@ -180,6 +183,7 @@
 			files = (
 				E4D75AB42C1E391C004D0FD8 /* PeerBrowser.swift in Sources */,
 				E4D75AA02C1DE6F9004D0FD8 /* PlayerListRow.swift in Sources */,
+				E4D75AB82C1E4A37004D0FD8 /* ContentView.swift in Sources */,
 				E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */,
 				E4D75A9E2C1DE64E004D0FD8 /* Player.swift in Sources */,
 				E4D75A9C2C1DE3B8004D0FD8 /* Gameview.swift in Sources */,
