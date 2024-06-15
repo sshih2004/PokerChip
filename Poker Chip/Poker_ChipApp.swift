@@ -11,7 +11,7 @@ import SwiftUI
 struct Poker_ChipApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TestEasyView()
         }
     }
 }

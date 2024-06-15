@@ -8,23 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		E4D75A8D2C1DE388004D0FD8 /* Poker_ChipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */; };
-		E4D75A8F2C1DE388004D0FD8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75A8E2C1DE388004D0FD8 /* ContentView.swift */; };
 		E4D75A912C1DE389004D0FD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D75A902C1DE389004D0FD8 /* Assets.xcassets */; };
 		E4D75A942C1DE389004D0FD8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D75A932C1DE389004D0FD8 /* Preview Assets.xcassets */; };
 		E4D75A9C2C1DE3B8004D0FD8 /* Gameview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75A9B2C1DE3B8004D0FD8 /* Gameview.swift */; };
 		E4D75A9E2C1DE64E004D0FD8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75A9D2C1DE64E004D0FD8 /* Player.swift */; };
 		E4D75AA02C1DE6F9004D0FD8 /* PlayerListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75A9F2C1DE6F9004D0FD8 /* PlayerListRow.swift */; };
+		E4D75AA62C1E2D69004D0FD8 /* PeerListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AA52C1E2D69004D0FD8 /* PeerListener.swift */; };
+		E4D75AB42C1E391C004D0FD8 /* PeerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */; };
+		E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E4D75A892C1DE388004D0FD8 /* Poker Chip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Poker Chip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poker_ChipApp.swift; sourceTree = "<group>"; };
-		E4D75A8E2C1DE388004D0FD8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E4D75A902C1DE389004D0FD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4D75A932C1DE389004D0FD8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E4D75A9B2C1DE3B8004D0FD8 /* Gameview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gameview.swift; sourceTree = "<group>"; };
 		E4D75A9D2C1DE64E004D0FD8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		E4D75A9F2C1DE6F9004D0FD8 /* PlayerListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListRow.swift; sourceTree = "<group>"; };
+		E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Poker-Chip-Info.plist"; sourceTree = SOURCE_ROOT; };
+		E4D75AA52C1E2D69004D0FD8 /* PeerListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerListener.swift; sourceTree = "<group>"; };
+		E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerBrowser.swift; sourceTree = "<group>"; };
+		E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEasyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +62,13 @@
 		E4D75A8B2C1DE388004D0FD8 /* Poker Chip */ = {
 			isa = PBXGroup;
 			children = (
+				E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */,
+				E4D75AA32C1E2D50004D0FD8 /* Networking */,
+				E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */,
 				E4D75AA12C1DED3A004D0FD8 /* ServerView */,
 				E4D75A9D2C1DE64E004D0FD8 /* Player.swift */,
 				E4D75A9A2C1DE3A1004D0FD8 /* GameViews */,
 				E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */,
-				E4D75A8E2C1DE388004D0FD8 /* ContentView.swift */,
 				E4D75A902C1DE389004D0FD8 /* Assets.xcassets */,
 				E4D75A922C1DE389004D0FD8 /* Preview Content */,
 			);
@@ -90,6 +97,15 @@
 			children = (
 			);
 			path = ServerView;
+			sourceTree = "<group>";
+		};
+		E4D75AA32C1E2D50004D0FD8 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				E4D75AA52C1E2D69004D0FD8 /* PeerListener.swift */,
+				E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,11 +178,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D75AB42C1E391C004D0FD8 /* PeerBrowser.swift in Sources */,
 				E4D75AA02C1DE6F9004D0FD8 /* PlayerListRow.swift in Sources */,
+				E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */,
 				E4D75A9E2C1DE64E004D0FD8 /* Player.swift in Sources */,
 				E4D75A9C2C1DE3B8004D0FD8 /* Gameview.swift in Sources */,
-				E4D75A8F2C1DE388004D0FD8 /* ContentView.swift in Sources */,
 				E4D75A8D2C1DE388004D0FD8 /* Poker_ChipApp.swift in Sources */,
+				E4D75AA62C1E2D69004D0FD8 /* PeerListener.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,10 +321,13 @@
 				DEVELOPMENT_TEAM = VAVV2BSFXT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Poker-Chip-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Poker Chip uses the local network to connect with players around you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -332,10 +353,13 @@
 				DEVELOPMENT_TEAM = VAVV2BSFXT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Poker-Chip-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Poker Chip uses the local network to connect with players around you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
