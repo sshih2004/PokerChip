@@ -5,6 +5,12 @@ class PeerBrowser: ObservableObject {
     var browser: NWBrowser?
     var connection: NWConnection?
     @Published var messages: [String] = []
+    var gameVar: GameVariables?
+    
+    
+    func setVar(gameVar: GameVariables) {
+        self.gameVar = gameVar
+    }
     
     func startBrowsing() {
         let parameters = NWParameters()
@@ -26,13 +32,16 @@ class PeerBrowser: ObservableObject {
         }
         
         browser.browseResultsChangedHandler = { results, changes in
+            self.gameVar?.devices.removeAll()
             for result in results {
                 switch result.endpoint {
                 case .service(let name, let type, let domain, let interface):
                     DispatchQueue.main.async {
-                        self.messages.append("Found service: \(name) \(type) \(domain) \(interface.debugDescription)")
+                        if name != self.gameVar?.name && !self.gameVar!.devices.contains(name) {
+                            self.gameVar?.devices.append(name)
+                        }
                     }
-                    self.connect(to: result.endpoint)
+                    //self.connect(to: result.endpoint)
                 default:
                     break
                 }

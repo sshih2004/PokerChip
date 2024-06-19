@@ -17,6 +17,9 @@
 		E4D75AB42C1E391C004D0FD8 /* PeerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */; };
 		E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */; };
 		E4D75AB82C1E4A37004D0FD8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */; };
+		E4D75ABA2C1E5E90004D0FD8 /* PlayerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AB92C1E5E90004D0FD8 /* PlayerList.swift */; };
+		E4D75ABC2C1E6517004D0FD8 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75ABB2C1E6517004D0FD8 /* Action.swift */; };
+		E4D75ABE2C1F66CC004D0FD8 /* GameVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75ABD2C1F66CC004D0FD8 /* GameVariables.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerBrowser.swift; sourceTree = "<group>"; };
 		E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEasyView.swift; sourceTree = "<group>"; };
 		E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E4D75AB92C1E5E90004D0FD8 /* PlayerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerList.swift; sourceTree = "<group>"; };
+		E4D75ABB2C1E6517004D0FD8 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		E4D75ABD2C1F66CC004D0FD8 /* GameVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameVariables.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,9 @@
 		E4D75A8B2C1DE388004D0FD8 /* Poker Chip */ = {
 			isa = PBXGroup;
 			children = (
+				E4D75ABD2C1F66CC004D0FD8 /* GameVariables.swift */,
+				E4D75ABB2C1E6517004D0FD8 /* Action.swift */,
+				E4D75AB92C1E5E90004D0FD8 /* PlayerList.swift */,
 				E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */,
 				E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */,
 				E4D75AA32C1E2D50004D0FD8 /* Networking */,
@@ -182,7 +191,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4D75AB42C1E391C004D0FD8 /* PeerBrowser.swift in Sources */,
+				E4D75ABA2C1E5E90004D0FD8 /* PlayerList.swift in Sources */,
 				E4D75AA02C1DE6F9004D0FD8 /* PlayerListRow.swift in Sources */,
+				E4D75ABC2C1E6517004D0FD8 /* Action.swift in Sources */,
+				E4D75ABE2C1F66CC004D0FD8 /* GameVariables.swift in Sources */,
 				E4D75AB82C1E4A37004D0FD8 /* ContentView.swift in Sources */,
 				E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */,
 				E4D75A9E2C1DE64E004D0FD8 /* Player.swift in Sources */,

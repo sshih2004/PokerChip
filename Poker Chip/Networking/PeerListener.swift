@@ -4,13 +4,23 @@ import Network
 class PeerListener: ObservableObject {
     var listener: NWListener?
     @Published var messages: [String] = []
+    var gameVar: GameVariables?
     
+    func setVar(gameVar: GameVariables) {
+        self.gameVar = gameVar
+    }
+    
+    func stopListening() {
+        if let listener = listener {
+            listener.cancel()
+        }
+    }
     func startListening() {
         do {
             let params = NWParameters.tcp
             listener = try NWListener(using: params)
             
-            listener?.service = NWListener.Service(name: "PeerListener", type: "_pokerchip._tcp")
+            listener?.service = NWListener.Service(name: gameVar?.name, type: "_pokerchip._tcp")
             
             listener?.stateUpdateHandler = { state in
                 switch state {
