@@ -17,7 +17,12 @@ class PeerListener: ObservableObject {
     }
     func startListening() {
         do {
-            let params = NWParameters.tcp
+            let params = NWParameters.applicationService
+            
+            // Add your custom game protocol to support game messages.
+            let gameOptions = NWProtocolFramer.Options(definition: GameProtocol.definition)
+            params.defaultProtocolStack.applicationProtocols.insert(gameOptions, at: 0)
+            
             listener = try NWListener(using: params)
             
             listener?.service = NWListener.Service(name: gameVar?.name, type: "_pokerchip._tcp")
@@ -31,6 +36,10 @@ class PeerListener: ObservableObject {
                 case .failed(let error):
                     DispatchQueue.main.async {
                         self.messages.append("Server failed with error: \(error)")
+                    }
+                case .cancelled:
+                    DispatchQueue.main.async {
+                        self.messages.append("Server stopped")
                     }
                 default:
                     break

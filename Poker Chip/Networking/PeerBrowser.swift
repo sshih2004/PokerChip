@@ -6,6 +6,7 @@ class PeerBrowser: ObservableObject {
     var connection: NWConnection?
     @Published var messages: [String] = []
     var gameVar: GameVariables?
+    var results: [NWBrowser.Result] = [NWBrowser.Result]()
     
     
     func setVar(gameVar: GameVariables) {
@@ -32,7 +33,8 @@ class PeerBrowser: ObservableObject {
         }
         
         browser.browseResultsChangedHandler = { results, changes in
-            self.gameVar?.devices.removeAll()
+            self.handleResults(results: results)
+            /*self.gameVar?.devices.removeAll()
             for result in results {
                 switch result.endpoint {
                 case .service(let name, let type, let domain, let interface):
@@ -45,14 +47,25 @@ class PeerBrowser: ObservableObject {
                 default:
                     break
                 }
-            }
+            }*/
         }
         
         browser.start(queue: .main)
         self.browser = browser
     }
     
-    private func connect(to endpoint: NWEndpoint) {
+    func handleResults(results: Set<NWBrowser.Result>) {
+        self.results = [NWBrowser.Result]()
+        for result in results {
+            if case let NWEndpoint.service(name: name, type: _, domain: _, interface: _) = result.endpoint {
+                if name != self.gameVar?.name {
+                    self.results.append(result)
+                }
+            }
+        }
+    }
+    
+    func connect(to endpoint: NWEndpoint) {
         let connection = NWConnection(to: endpoint, using: .tcp)
         self.connection = connection
         

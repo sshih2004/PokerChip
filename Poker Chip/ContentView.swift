@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Network
 
 struct ContentView: View {
     @ObservedObject var server = PeerListener()
@@ -37,8 +38,8 @@ struct ContentView: View {
                 .disabled(hostDisabled)
                 Button {
                     server.setVar(gameVar: gameVar)
-                    server.startListening()
-                    hostDisabled = true
+                    server.stopListening()
+                    hostDisabled = false
                     
                 } label: {
                     HStack {
@@ -65,15 +66,26 @@ struct ContentView: View {
                 }
             }
             Section("NEARBY DEVICES") {
-                List(gameVar.devices, id: \.self) { device in
-                    Button(device) {
-                        
+                List(client.results, id: \.self) { result in
+                    if case let NWEndpoint.service(name: name, type: _, domain: _, interface: _) = result.endpoint {
+                        Button(name) {
+                            client.connect(to: result.endpoint)
+                        }
+                        .contentShape(Rectangle())
+                        .buttonStyle(BorderlessButtonStyle())
                     }
+                    
                 }
                 .frame(height: 300.0)
             }
-            Section("Log Message") {
+            Section("Log Client Message") {
                 List(client.messages, id: \.self) { message in
+                        Text(message)
+                }
+                .frame(height: 300.0)
+            }
+            Section("Log Server Message") {
+                List(server.messages, id: \.self) { message in
                         Text(message)
                 }
                 .frame(height: 300.0)
