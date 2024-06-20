@@ -11,5 +11,6 @@ struct PlayerList: Codable {
     var playerList: [Player] = [Player]()
     func data() -> Data? {
         try? JSONEncoder().encode(self)
+        // hi
     }
 }
