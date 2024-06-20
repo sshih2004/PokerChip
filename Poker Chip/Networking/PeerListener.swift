@@ -19,9 +19,6 @@ class PeerListener: ObservableObject {
         do {
             let params = NWParameters.applicationService
             
-            // Add your custom game protocol to support game messages.
-            let gameOptions = NWProtocolFramer.Options(definition: GameProtocol.definition)
-            params.defaultProtocolStack.applicationProtocols.insert(gameOptions, at: 0)
             
             listener = try NWListener(using: params)
             

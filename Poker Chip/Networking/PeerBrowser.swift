@@ -66,7 +66,7 @@ class PeerBrowser: ObservableObject {
     }
     
     func connect(to endpoint: NWEndpoint) {
-        let connection = NWConnection(to: endpoint, using: .tcp)
+        let connection = NWConnection(to: endpoint, using: NWParameters())
         self.connection = connection
         
         connection.stateUpdateHandler = { state in
@@ -112,13 +112,12 @@ class PeerBrowser: ObservableObject {
     }
     
     private func send(message: String) {
-        let data = message.data(using: .utf8)
-        connection?.send(content: data, completion: .contentProcessed({ sendError in
-            if let sendError = sendError {
-                DispatchQueue.main.async {
-                    self.messages.append("Send error: \(sendError)")
-                }
-            }
-        }))
+        // Create a message object to hold the command type.
+        let message = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
+        let context = NWConnection.ContentContext(identifier: "SelectCharacter",
+                                                  metadata: [message])
+        // Send the app content along with the message.
+        connection?.send(content: "HIHI".data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+    
     }
 }

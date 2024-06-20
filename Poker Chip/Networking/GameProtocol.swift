@@ -142,3 +142,24 @@ struct GameProtocolHeader: Codable {
         return MemoryLayout<UInt32>.size * 2
     }
 }
+
+extension NWParameters {
+    
+    // Create parameters for use in PeerConnection and PeerListener.
+    convenience init() {
+        // Customize TCP options to enable keepalives.
+        let tcpOptions = NWProtocolTCP.Options()
+        tcpOptions.enableKeepalive = true
+        tcpOptions.keepaliveIdle = 2
+        
+        // Create parameters with custom TLS and TCP options.
+        self.init(tls: nil, tcp: tcpOptions)
+        
+        // Enable using a peer-to-peer link.
+        self.includePeerToPeer = true
+        
+        // Add your custom game protocol to support game messages.
+        let gameOptions = NWProtocolFramer.Options(definition: GameProtocol.definition)
+        self.defaultProtocolStack.applicationProtocols.insert(gameOptions, at: 0)
+    }
+}
