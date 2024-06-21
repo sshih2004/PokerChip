@@ -69,7 +69,7 @@ class PeerBrowser: ObservableObject {
         let connection = NWConnection(to: endpoint, using: NWParameters())
         self.connection = connection
         
-        connection.stateUpdateHandler = { state in
+        self.connection?.stateUpdateHandler = { state in
             switch state {
             case .ready:
                 DispatchQueue.main.async {
@@ -90,22 +90,20 @@ class PeerBrowser: ObservableObject {
     }
     
     private func receive() {
-        connection?.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, isComplete, error in
-            if let data = data, !data.isEmpty {
-                let message = String(decoding: data, as: UTF8.self)
-                DispatchQueue.main.async {
-                    self.messages.append("Received message: \(message)")
+        connection?.receiveMessage { (content, context, isComplete, error) in
+            // Extract your message type from the received context.
+            if let gameMessage = context?.protocolMetadata(definition: GameProtocol.definition) as? NWProtocolFramer.Message {
+                switch gameMessage.gameMessageType {
+                case .invalid:
+                    print("Received invalid message")
+                case .selectedCharacter:
+                    self.messages.append("SELECTED CHARACTER")
+                case .move:
+                    self.messages.append("HANDLE MOVE")
                 }
             }
-            
-            if isComplete {
-                self.connection?.cancel()
-            } else if let error = error {
-                DispatchQueue.main.async {
-                    self.messages.append("Receive error: \(error)")
-                }
-                self.connection?.cancel()
-            } else {
+            if error == nil {
+                // Continue to receive more messages until you receive an error.
                 self.receive()
             }
         }
@@ -113,11 +111,11 @@ class PeerBrowser: ObservableObject {
     
     private func send(message: String) {
         // Create a message object to hold the command type.
-        let message = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
+        let message1 = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
         let context = NWConnection.ContentContext(identifier: "SelectCharacter",
-                                                  metadata: [message])
+                                                  metadata: [message1])
         // Send the app content along with the message.
-        connection?.send(content: "HIHI".data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+        connection?.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
     
     }
 }

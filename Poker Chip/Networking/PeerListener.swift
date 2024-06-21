@@ -64,36 +64,31 @@ class PeerListener: ObservableObject {
     }
     
     private func receive(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, isComplete, error in
-            if let data = data, !data.isEmpty {
-                let message = String(decoding: data, as: UTF8.self)
-                DispatchQueue.main.async {
-                    self.messages.append("Received message: \(message)")
+        connection.receiveMessage { content, context, isComplete, error in
+            // Extract your message type from the received context.
+            if let gameMessage = context?.protocolMetadata(definition: GameProtocol.definition) as? NWProtocolFramer.Message {
+                switch gameMessage.gameMessageType {
+                case .invalid:
+                    print("Received invalid message")
+                case .selectedCharacter:
+                    self.messages.append("SELECTED CHARACTER")
+                case .move:
+                    self.messages.append("HANDLE MOVE")
                 }
-                self.send(on: connection, message: "Echo: \(message)")
             }
-            
-            if isComplete {
-                connection.cancel()
-            } else if let error = error {
-                DispatchQueue.main.async {
-                    self.messages.append("Receive error: \(error)")
-                }
-                connection.cancel()
-            } else {
+            if error == nil {
+                // Continue to receive more messages until you receive an error.
                 self.receive(on: connection)
             }
         }
     }
     
     private func send(on connection: NWConnection, message: String) {
-        let data = message.data(using: .utf8)
-        connection.send(content: data, completion: .contentProcessed({ sendError in
-            if let sendError = sendError {
-                DispatchQueue.main.async {
-                    self.messages.append("Send error: \(sendError)")
-                }
-            }
-        }))
+        // Create a message object to hold the command type.
+        let message1 = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
+        let context = NWConnection.ContentContext(identifier: "SelectCharacter",
+                                                  metadata: [message1])
+        // Send the app content along with the message.
+        connection.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
     }
 }
