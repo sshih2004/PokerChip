@@ -3,7 +3,7 @@ import Network
 
 class PeerListener: ObservableObject {
     var listener: NWListener?
-    var connection: NWConnection?
+    var connections: [NWConnection] = [NWConnection]()
     @Published var messages: [String] = []
     var gameVar: GameVariables?
     
@@ -59,13 +59,13 @@ class PeerListener: ObservableObject {
     }
     
     private func handleNewConnection(_ connection: NWConnection) {
-        self.connection = connection
-        self.connection?.start(queue: .main)
-        receive()
+        connection.start(queue: .main)
+        receive(on: connection)
+        self.connections.append(connection)
     }
     
-    private func receive() {
-        self.connection?.receiveMessage { content, context, isComplete, error in
+    private func receive(on connection: NWConnection) {
+        connection.receiveMessage { content, context, isComplete, error in
             // Extract your message type from the received context.
             if let gameMessage = context?.protocolMetadata(definition: GameProtocol.definition) as? NWProtocolFramer.Message {
                 switch gameMessage.gameMessageType {
@@ -91,32 +91,36 @@ class PeerListener: ObservableObject {
             }
             if error == nil {
                 // Continue to receive more messages until you receive an error.
-                self.receive()
+                self.receive(on: connection)
             }
         }
     }
     
     private func sendPlayerList() {
-        // Create a message object to hold the command type.
-        let framerMessage = NWProtocolFramer.Message(gameMessageType: .playerList)
-        let context = NWConnection.ContentContext(identifier: "PlayerList",
-                                                  metadata: [framerMessage])
-        let encoder = JSONEncoder()
-        // Send the app content along with the message.let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(self.gameVar!.playerList)
-            self.connection?.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
-        } catch {
-            print(error.localizedDescription)
+        for connection in self.connections {
+            // Create a message object to hold the command type.
+            let framerMessage = NWProtocolFramer.Message(gameMessageType: .playerList)
+            let context = NWConnection.ContentContext(identifier: "PlayerList",
+                                                      metadata: [framerMessage])
+            let encoder = JSONEncoder()
+            // Send the app content along with the message.let encoder = JSONEncoder()
+            do {
+                let data = try encoder.encode(self.gameVar!.playerList)
+                connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
     private func send(message: String) {
-        // Create a message object to hold the command type.
-        let message1 = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
-        let context = NWConnection.ContentContext(identifier: "SelectCharacter",
-                                                  metadata: [message1])
-        // Send the app content along with the message.
-        self.connection?.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+        for connection in self.connections {
+            // Create a message object to hold the command type.
+            let message1 = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
+            let context = NWConnection.ContentContext(identifier: "SelectCharacter",
+                                                      metadata: [message1])
+            // Send the app content along with the message.
+            connection.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+        }
     }
 }
