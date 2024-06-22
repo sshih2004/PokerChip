@@ -7,15 +7,11 @@
 
 import Foundation
 
-
-func handleCall() {
-    
-}
-
-func handleFold() {
-    
-}
-
-func handleRaise() {
-    
+struct Action: Codable {
+    var playerList: PlayerList
+    var betSize: Double
+    var optionCall: Bool
+    var optionRaise: Bool
+    var optionCheck: Bool
+    var optionFold: Bool
 }

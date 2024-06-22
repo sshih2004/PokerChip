@@ -12,7 +12,7 @@ struct ContentView: View {
     @ObservedObject var server = PeerListener()
     @State var devices: [String] = [String]()
     @ObservedObject var client = PeerBrowser()
-    @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String]())
+    @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
     @State var hostDisabled: Bool = false
     @State var nameDisabled: Bool = false
     @State var hostFullScreen: Bool = false
@@ -29,10 +29,12 @@ struct ContentView: View {
                 Button {
                     gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100, position: "Unknown"))
                     server.setVar(gameVar: gameVar)
+                    server.serverGameHandling = ServerGameHandling(gameVar: gameVar)
                     server.startListening()
                     hostDisabled = true
                     nameDisabled = true
                     hostFullScreen = true
+                    gameVar.isServer = true
                     
                 } label: {
                     HStack {
@@ -43,7 +45,7 @@ struct ContentView: View {
                 }
                 .disabled(hostDisabled)
                 .fullScreenCover(isPresented: $hostFullScreen, content: {
-                    Gameview(gameVar: gameVar)
+                    Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling)
                 })
                 Button {
                     server.setVar(gameVar: gameVar)
@@ -85,9 +87,8 @@ struct ContentView: View {
                         .contentShape(Rectangle())
                         .buttonStyle(BorderlessButtonStyle())
                         .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
-                            Gameview(gameVar: gameVar)
+                            Gameview(gameVar: gameVar, client: client)
                         })
-                        
                     }
                     
                 }

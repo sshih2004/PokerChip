@@ -9,6 +9,8 @@ import SwiftUI
 
 struct Gameview: View {
     @ObservedObject var gameVar: GameVariables
+    var serverGameHandling: ServerGameHandling?
+    var client: PeerBrowser?
     var body: some View {
         VStack {
             List(gameVar.playerList.playerList) { player in
@@ -17,16 +19,43 @@ struct Gameview: View {
             HStack {
                 Spacer()
                 Button("FOLD") {
+                    if gameVar.isServer {
+                        
+                    } else {
+                        client?.returnAction(clientAction: ClientAction(betSize: 0, clientAction: .fold))
+                    }
+                }
+                .disabled(gameVar.buttonFold)
+                Spacer()
+                Button("CHECK") {
+                    if gameVar.isServer {
+                        
+                    } else {
+                        client?.returnAction(clientAction: ClientAction(betSize: 0, clientAction: .check))
+                    }
                     
                 }
+                .disabled(gameVar.buttonCheck)
                 Spacer()
                 Button("CALL") {
+                    if gameVar.isServer {
+                        
+                    } else {
+                        client?.returnAction(clientAction: ClientAction(betSize: 0, clientAction: .call))
+                    }
                     
                 }
+                .disabled(gameVar.buttonCall)
                 Spacer()
                 Button("RAISE") {
+                    if gameVar.isServer {
+                        
+                    } else {
+                        client?.returnAction(clientAction: ClientAction(betSize: 0, clientAction: .raise))
+                    }
                     
                 }
+                .disabled(gameVar.buttonRaise)
                 Spacer()
             }
         }
@@ -34,5 +63,5 @@ struct Gameview: View {
 }
 
 #Preview {
-    Gameview(gameVar: GameVariables(name: "HIHI", chipCount: 100, devices: [String]()))
+    Gameview(gameVar: GameVariables(name: "HIHI", chipCount: 100, devices: [String](), isServer: false))
 }

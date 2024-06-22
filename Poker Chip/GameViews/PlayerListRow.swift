@@ -11,10 +11,12 @@ struct PlayerListRow: View {
     var player: Player
     var bb: Bool
     var body: some View {
-        HStack {
-            Text(player.name)
-            Text("Position: " + player.position)
-            Text("Chip: " + String(player.chip))
+        VStack {
+            HStack {
+                Text(player.name)
+                Text("Position: " + player.position)
+                Text("Chip: " + String(player.chip))
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ class PeerListener: ObservableObject {
     var connections: [NWConnection] = [NWConnection]()
     @Published var messages: [String] = []
     var gameVar: GameVariables?
+    var serverGameHandling: ServerGameHandling?
     
     func setVar(gameVar: GameVariables) {
         self.gameVar = gameVar
@@ -83,6 +84,17 @@ class PeerListener: ObservableObject {
                         let player = try decoder.decode(Player.self, from: content!)
                         self.gameVar?.playerList.playerList.append(player)
                         self.sendPlayerList()
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                case .action:
+                    print("Server side received action request")
+                case .clientAction:
+                    let decoder = JSONDecoder()
+                    do {
+                        let clientAction = try decoder.decode(ClientAction.self, from: content!)
+                        // TODO: add handle client action
                         
                     } catch {
                         print(error.localizedDescription)

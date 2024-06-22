@@ -112,6 +112,16 @@ class PeerBrowser: ObservableObject {
                     }
                 case .startGame:
                     self.messages.append("received start game at client")
+                case .action:
+                    let decoder = JSONDecoder()
+                    do {
+                        let action = try decoder.decode(Action.self, from: content!)
+                        self.handleAction(action: action)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                case .clientAction:
+                    print("Client received client action error")
                 }
             }
             if error == nil {
@@ -148,5 +158,31 @@ class PeerBrowser: ObservableObject {
         // Send the app content along with the message.
         connection?.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
     
+    }
+    
+    func handleAction(action: Action) {
+        gameVar?.playerList = action.playerList
+        gameVar?.buttonCall = action.optionCall
+        gameVar?.buttonRaise = action.optionRaise
+        gameVar?.buttonCheck = action.optionCheck
+        gameVar?.buttonFold = action.optionFold
+    }
+    
+    func returnAction(clientAction: ClientAction) {
+        // Create a message object to hold the command type.
+        let message1 = NWProtocolFramer.Message(gameMessageType: .clientAction)
+        let context = NWConnection.ContentContext(identifier: "ClientAction",
+                                                  metadata: [message1])
+        // Send the app content along with the message.
+        
+        let content = clientAction
+        let encoder = JSONEncoder()
+        // Send the app content along with the message.let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(content)
+            self.connection?.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
