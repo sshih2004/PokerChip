@@ -14,6 +14,7 @@ enum GameMessageType: UInt32 {
     case invalid = 0
     case selectedCharacter = 1
     case move = 2
+    case playerList = 3
 }
 
 // Create a class that implements a framing protocol.

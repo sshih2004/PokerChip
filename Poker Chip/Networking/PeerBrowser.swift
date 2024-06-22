@@ -100,6 +100,16 @@ class PeerBrowser: ObservableObject {
                     self.messages.append("SELECTED CHARACTER")
                 case .move:
                     self.messages.append("HANDLE MOVE")
+                case .playerList:
+                    let decoder = JSONDecoder()
+                    do {
+                        let playerList = try decoder.decode(PlayerList.self, from: content!)
+                        self.gameVar?.playerList = playerList
+                        self.messages.append(playerList.playerList.first!.name)
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             }
             if error == nil {

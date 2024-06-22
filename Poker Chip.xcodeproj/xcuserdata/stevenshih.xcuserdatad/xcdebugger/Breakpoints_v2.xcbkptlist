@@ -14,8 +14,8 @@
             filePath = "Poker Chip/Networking/GameProtocol.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "handleOutput(framer:message:messageLength:isComplete:)"
             landmarkType = "7">
          </BreakpointContent>
