@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+
+func handleCall() {
+    
+}
+
+func handleFold() {
+    
+}
+
+func handleRaise() {
+    
+}

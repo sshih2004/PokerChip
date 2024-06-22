@@ -12,8 +12,10 @@ struct ContentView: View {
     @ObservedObject var server = PeerListener()
     @State var devices: [String] = [String]()
     @ObservedObject var client = PeerBrowser()
-    @ObservedObject var gameVar = GameVariables(name: "", devices: [String]())
+    @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String]())
     @State var hostDisabled: Bool = false
+    @State var nameDisabled: Bool = false
+    @State var hostFullScreen: Bool = false
     
     var body: some View {
         List {
@@ -22,11 +24,15 @@ struct ContentView: View {
                     Text("Your Name")
                     TextField("Name", text: $gameVar.name)
                         .multilineTextAlignment(.trailing)
+                        .disabled(nameDisabled)
                 }
                 Button {
+                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100, position: "Unknown"))
                     server.setVar(gameVar: gameVar)
                     server.startListening()
                     hostDisabled = true
+                    nameDisabled = true
+                    hostFullScreen = true
                     
                 } label: {
                     HStack {
@@ -36,6 +42,9 @@ struct ContentView: View {
                     }
                 }
                 .disabled(hostDisabled)
+                .fullScreenCover(isPresented: $hostFullScreen, content: {
+                    Gameview(gameVar: gameVar)
+                })
                 Button {
                     server.setVar(gameVar: gameVar)
                     server.stopListening()
@@ -70,9 +79,15 @@ struct ContentView: View {
                     if case let NWEndpoint.service(name: name, type: _, domain: _, interface: _) = result.endpoint {
                         Button(name) {
                             client.connect(to: result.endpoint)
+                            gameVar.fullScreen = true
+                            nameDisabled = true
                         }
                         .contentShape(Rectangle())
                         .buttonStyle(BorderlessButtonStyle())
+                        .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
+                            Gameview(gameVar: gameVar)
+                        })
+                        
                     }
                     
                 }

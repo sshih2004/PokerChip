@@ -75,7 +75,7 @@ class PeerBrowser: ObservableObject {
                 DispatchQueue.main.async {
                     self.messages.append("Client connected to service")
                 }
-                self.send(message: "Hello from Client!")
+                self.sendStartGame()
                 self.receive()
             case .failed(let error):
                 DispatchQueue.main.async {
@@ -105,11 +105,13 @@ class PeerBrowser: ObservableObject {
                     do {
                         let playerList = try decoder.decode(PlayerList.self, from: content!)
                         self.gameVar?.playerList = playerList
-                        self.messages.append(playerList.playerList.first!.name)
+                        print(playerList.playerList.first!.name)
                         
                     } catch {
                         print(error.localizedDescription)
                     }
+                case .startGame:
+                    self.messages.append("received start game at client")
                 }
             }
             if error == nil {
@@ -117,6 +119,25 @@ class PeerBrowser: ObservableObject {
                 self.receive()
             }
         }
+    }
+    
+    private func sendStartGame() {
+        // Create a message object to hold the command type.
+        let message1 = NWProtocolFramer.Message(gameMessageType: .startGame)
+        let context = NWConnection.ContentContext(identifier: "StartGame",
+                                                  metadata: [message1])
+        // Send the app content along with the message.
+        
+        let content = Player(name: gameVar!.name, chip: 100, position: "Unknown")
+        let encoder = JSONEncoder()
+        // Send the app content along with the message.let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(content)
+            self.connection?.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
     }
     
     private func send(message: String) {

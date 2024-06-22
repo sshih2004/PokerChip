@@ -8,14 +8,31 @@
 import SwiftUI
 
 struct Gameview: View {
-    @State var players:[Player] = [Player(name: "hi", chip: 30, position: "Dealer")]
+    @ObservedObject var gameVar: GameVariables
     var body: some View {
-        List(players) { player in
-            PlayerListRow(player: player, bb: true)
+        VStack {
+            List(gameVar.playerList.playerList) { player in
+                PlayerListRow(player: player, bb: true)
+            }
+            HStack {
+                Spacer()
+                Button("FOLD") {
+                    
+                }
+                Spacer()
+                Button("CALL") {
+                    
+                }
+                Spacer()
+                Button("RAISE") {
+                    
+                }
+                Spacer()
+            }
         }
     }
 }
 
 #Preview {
-    Gameview()
+    Gameview(gameVar: GameVariables(name: "HIHI", chipCount: 100, devices: [String]()))
 }

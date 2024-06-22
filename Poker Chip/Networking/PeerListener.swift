@@ -62,10 +62,6 @@ class PeerListener: ObservableObject {
         self.connection = connection
         self.connection?.start(queue: .main)
         receive()
-        send(message: "GOTCHA")
-        var pList: PlayerList = PlayerList()
-        pList.playerList.append(Player(name: "Steven", chip: 30, position: "Dealer"))
-        sendPlayerList(message: pList)
     }
     
     private func receive() {
@@ -81,6 +77,16 @@ class PeerListener: ObservableObject {
                     self.messages.append("HANDLE MOVE")
                 case .playerList:
                     print("HI")
+                case .startGame:
+                    let decoder = JSONDecoder()
+                    do {
+                        let player = try decoder.decode(Player.self, from: content!)
+                        self.gameVar?.playerList.playerList.append(player)
+                        self.sendPlayerList()
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             }
             if error == nil {
@@ -90,7 +96,7 @@ class PeerListener: ObservableObject {
         }
     }
     
-    private func sendPlayerList(message: PlayerList) {
+    private func sendPlayerList() {
         // Create a message object to hold the command type.
         let framerMessage = NWProtocolFramer.Message(gameMessageType: .playerList)
         let context = NWConnection.ContentContext(identifier: "PlayerList",
@@ -98,7 +104,7 @@ class PeerListener: ObservableObject {
         let encoder = JSONEncoder()
         // Send the app content along with the message.let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(message)
+            let data = try encoder.encode(self.gameVar!.playerList)
             self.connection?.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
         } catch {
             print(error.localizedDescription)

@@ -13,12 +13,12 @@ struct PlayerListRow: View {
     var body: some View {
         HStack {
             Text(player.name)
-            Text(player.position)
-            Text(String(player.chip))
+            Text("Position: " + player.position)
+            Text("Chip: " + String(player.chip))
         }
     }
 }
 
 #Preview {
-    PlayerListRow(player: Player(name: "hi", chip: 3, position: "d"), bb: true)
+    PlayerListRow(player: Player(name: "hi", chip: 30, position: "Dealer"), bb: true)
 }
