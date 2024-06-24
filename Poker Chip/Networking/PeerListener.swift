@@ -20,7 +20,6 @@ class PeerListener: ObservableObject {
     func startListening() {
         do {
             
-            
             listener = try NWListener(using: NWParameters())
             
             listener?.service = NWListener.Service(name: gameVar?.name, type: "_pokerchip._tcp")
@@ -61,7 +60,9 @@ class PeerListener: ObservableObject {
     
     private func handleNewConnection(_ connection: NWConnection) {
         connection.start(queue: .main)
-        receive(on: connection)
+        DispatchQueue.global().async {
+            self.receive(on: connection)
+        }
         self.connections.append(connection)
     }
     
@@ -95,6 +96,7 @@ class PeerListener: ObservableObject {
                     do {
                         let clientAction = try decoder.decode(ClientAction.self, from: content!)
                         // TODO: add handle client action
+                        self.serverGameHandling?.serverHandleClient(action: clientAction)
                         
                     } catch {
                         print(error.localizedDescription)
@@ -105,6 +107,21 @@ class PeerListener: ObservableObject {
                 // Continue to receive more messages until you receive an error.
                 self.receive(on: connection)
             }
+        }
+    }
+    
+    func requestAction(idx: Int, action: Action) {
+        let connection = self.connections[idx]
+        let framerMessage = NWProtocolFramer.Message(gameMessageType: .action)
+        let context = NWConnection.ContentContext(identifier: "Action",
+                                                  metadata: [framerMessage])
+        let encoder = JSONEncoder()
+        // Send the app content along with the message.let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(action)
+            connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

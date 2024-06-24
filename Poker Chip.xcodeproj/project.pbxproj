@@ -85,7 +85,6 @@
 				E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */,
 				E4D75AA32C1E2D50004D0FD8 /* Networking */,
 				E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */,
-				E4D75AA12C1DED3A004D0FD8 /* ServerView */,
 				E4D75A9D2C1DE64E004D0FD8 /* Player.swift */,
 				E4D75A9A2C1DE3A1004D0FD8 /* GameViews */,
 				E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */,
@@ -110,13 +109,6 @@
 				E4D75A9F2C1DE6F9004D0FD8 /* PlayerListRow.swift */,
 			);
 			path = GameViews;
-			sourceTree = "<group>";
-		};
-		E4D75AA12C1DED3A004D0FD8 /* ServerView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ServerView;
 			sourceTree = "<group>";
 		};
 		E4D75AA32C1E2D50004D0FD8 /* Networking */ = {

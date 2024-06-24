@@ -14,11 +14,13 @@ class GameVariables: ObservableObject {
     @Published var isServer: Bool
     @Published var playerList: PlayerList = PlayerList()
     @Published var fullScreen: Bool = false
-    @Published var actionTurn: Bool = false
-    @Published var buttonFold: Bool = false
-    @Published var buttonCheck: Bool = false
-    @Published var buttonCall: Bool = false
-    @Published var buttonRaise: Bool = false
+    @Published var actionTurn: Bool = true
+    @Published var buttonFold: Bool = true
+    @Published var buttonCheck: Bool = true
+    @Published var buttonCall: Bool = true
+    @Published var buttonRaise: Bool = true
+    var pending: Bool = false
+    let pendingCondition = NSCondition()
     init(name: String, chipCount: Int, devices: [String], isServer: Bool) {
         self.name = name
         self.chipCount = chipCount

@@ -11,6 +11,7 @@ import Foundation
 struct Player: Identifiable, Codable {
     var id: UUID = UUID()
     var name: String
-    var chip: Int
+    var chip: Double
     var position: String
+    var fold: Bool = false
 }

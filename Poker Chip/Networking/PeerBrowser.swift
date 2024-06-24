@@ -169,6 +169,10 @@ class PeerBrowser: ObservableObject {
     }
     
     func returnAction(clientAction: ClientAction) {
+        gameVar?.buttonCall = true
+        gameVar?.buttonRaise = true
+        gameVar?.buttonCheck = true
+        gameVar?.buttonFold = true
         // Create a message object to hold the command type.
         let message1 = NWProtocolFramer.Message(gameMessageType: .clientAction)
         let context = NWConnection.ContentContext(identifier: "ClientAction",

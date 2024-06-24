@@ -15,7 +15,6 @@ struct ContentView: View {
     @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
     @State var hostDisabled: Bool = false
     @State var nameDisabled: Bool = false
-    @State var hostFullScreen: Bool = false
     
     var body: some View {
         List {
@@ -29,11 +28,11 @@ struct ContentView: View {
                 Button {
                     gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100, position: "Unknown"))
                     server.setVar(gameVar: gameVar)
-                    server.serverGameHandling = ServerGameHandling(gameVar: gameVar)
+                    server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
                     server.startListening()
                     hostDisabled = true
                     nameDisabled = true
-                    hostFullScreen = true
+                    gameVar.fullScreen = true
                     gameVar.isServer = true
                     
                 } label: {
@@ -44,9 +43,6 @@ struct ContentView: View {
                     }
                 }
                 .disabled(hostDisabled)
-                .fullScreenCover(isPresented: $hostFullScreen, content: {
-                    Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling)
-                })
                 Button {
                     server.setVar(gameVar: gameVar)
                     server.stopListening()
@@ -86,9 +82,6 @@ struct ContentView: View {
                         }
                         .contentShape(Rectangle())
                         .buttonStyle(BorderlessButtonStyle())
-                        .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
-                            Gameview(gameVar: gameVar, client: client)
-                        })
                     }
                     
                 }
@@ -107,6 +100,9 @@ struct ContentView: View {
                 .frame(height: 300.0)
             }
         }
+        .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
+            Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar), client: client)
+        })
     }
 }
 
