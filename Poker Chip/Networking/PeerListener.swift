@@ -101,6 +101,17 @@ class PeerListener: ObservableObject {
                     } catch {
                         print(error.localizedDescription)
                     }
+                    let framerMessage = NWProtocolFramer.Message(gameMessageType: .action)
+                    let context = NWConnection.ContentContext(identifier: "Action",
+                                                              metadata: [framerMessage])
+                    let encoder = JSONEncoder()
+                    // Send the app content along with the message.let encoder = JSONEncoder()
+                    do {
+                        let data = try encoder.encode(Action(playerList: self.gameVar!.playerList, betSize: self.serverGameHandling!.bettingSize, optionCall: true, optionRaise: true, optionCheck: true, optionFold: true))
+                        connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             }
             if error == nil {

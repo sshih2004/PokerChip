@@ -9,7 +9,7 @@ import Foundation
 
 class GameVariables: ObservableObject {
     @Published var name: String
-    @Published var chipCount: Int
+    @Published var chipCount: Double
     @Published var devices: [String]
     @Published var isServer: Bool
     @Published var playerList: PlayerList = PlayerList()
@@ -21,7 +21,8 @@ class GameVariables: ObservableObject {
     @Published var buttonRaise: Bool = true
     var pending: Bool = false
     let pendingCondition = NSCondition()
-    init(name: String, chipCount: Int, devices: [String], isServer: Bool) {
+    var curAction: Action?
+    init(name: String, chipCount: Double, devices: [String], isServer: Bool) {
         self.name = name
         self.chipCount = chipCount
         self.devices = devices

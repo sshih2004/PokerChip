@@ -10,7 +10,9 @@ import SwiftUI
 struct Gameview: View {
     @ObservedObject var gameVar: GameVariables
     @ObservedObject var serverGameHandling: ServerGameHandling
+    @State var clientRaising: Double = 1.0
     var client: PeerBrowser?
+    @State var raiseAlert: Bool = false
     var body: some View {
         VStack {
             List(gameVar.playerList.playerList) { player in
@@ -56,15 +58,26 @@ struct Gameview: View {
                 Spacer()
                 Button("RAISE") {
                     // TODO: handle raise amount
-                    if gameVar.isServer {
-                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: 0.0, clientAction: .raise))
-                        
-                    } else {
-                        client?.returnAction(clientAction: ClientAction(betSize: 0, clientAction: .raise))
-                    }
+                    raiseAlert = true
                     
                 }
-                .disabled(gameVar.buttonRaise)
+                .disabled(!gameVar.buttonRaise)
+                .fullScreenCover(isPresented: $raiseAlert, onDismiss: {
+                    if gameVar.isServer {
+                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: clientRaising, clientAction: .raise))
+                        
+                    } else {
+                        client?.returnAction(clientAction: ClientAction(betSize: clientRaising, clientAction: .raise))
+                    }
+                }) {
+                    Spacer()
+                    Slider(value: $clientRaising, in: (gameVar.curAction?.betSize ?? 1)...gameVar.chipCount, step: 0.5)
+                    Text(String(clientRaising))
+                    Spacer()
+                    Button("Done") {
+                        raiseAlert = false
+                    }
+                }
                 Spacer()
             }
         }
