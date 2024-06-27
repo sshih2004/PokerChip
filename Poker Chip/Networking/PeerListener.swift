@@ -136,7 +136,7 @@ class PeerListener: ObservableObject {
         }
     }
     
-    private func sendPlayerList() {
+    func sendPlayerList() {
         for connection in self.connections {
             // Create a message object to hold the command type.
             let framerMessage = NWProtocolFramer.Message(gameMessageType: .playerList)

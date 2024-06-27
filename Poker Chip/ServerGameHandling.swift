@@ -13,9 +13,11 @@ class ServerGameHandling: ObservableObject {
     var threePlayer: [String] = ["D", "SB", "BB"]
     var bettingSize: Double = 2.0
     var playerIdx: Int = 0
+    var lastPlayerIdx: Int
     init(server: PeerListener, gameVar: GameVariables) {
         self.server = server
         self.gameVar = gameVar
+        lastPlayerIdx = gameVar.playerList.playerList.count
     }
     func startGame() {
         // TODO: figure out how to simulate round
@@ -47,6 +49,8 @@ class ServerGameHandling: ObservableObject {
     }
     
     func serverHandleClient(action: ClientAction) {
+        self.gameVar.playerList.playerList[playerIdx+1].chip -= action.betSize
+        self.server.sendPlayerList()
         playerIdx += 1
         if playerIdx < gameVar.playerList.playerList.count - 1 {
             server.requestAction(idx: playerIdx, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: false, optionRaise: false, optionCheck: true, optionFold: false))
@@ -73,6 +77,7 @@ class ServerGameHandling: ObservableObject {
         gameVar.buttonRaise = true
         gameVar.buttonCheck = true
         gameVar.buttonFold = true
+        self.server.sendPlayerList()
         server.requestAction(idx: playerIdx, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: false, optionRaise: false, optionCheck: true, optionFold: false))
     }
     

@@ -47,10 +47,10 @@ struct Gameview: View {
                 Spacer()
                 Button("CALL") {
                     if gameVar.isServer {
-                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: 0.0, clientAction: .call))
+                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: gameVar.curAction?.betSize ?? 0, clientAction: .call))
                         
                     } else {
-                        client?.returnAction(clientAction: ClientAction(betSize: 0, clientAction: .call))
+                        client?.returnAction(clientAction: ClientAction(betSize: gameVar.curAction?.betSize ?? 0, clientAction: .call))
                     }
                     
                 }
@@ -61,7 +61,7 @@ struct Gameview: View {
                     raiseAlert = true
                     
                 }
-                .disabled(!gameVar.buttonRaise)
+                .disabled(gameVar.buttonRaise)
                 .fullScreenCover(isPresented: $raiseAlert, onDismiss: {
                     if gameVar.isServer {
                         serverGameHandling.serverHandleSelf(action: ClientAction(betSize: clientRaising, clientAction: .raise))
