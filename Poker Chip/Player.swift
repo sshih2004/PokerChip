@@ -14,4 +14,5 @@ struct Player: Identifiable, Codable {
     var chip: Double
     var position: String
     var fold: Bool = false
+    var raiseSize: Double = 0.0
 }
