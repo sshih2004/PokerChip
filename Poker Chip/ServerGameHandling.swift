@@ -23,14 +23,8 @@ class ServerGameHandling: ObservableObject {
         self.gameVar = gameVar
         lastPlayerIdx = gameVar.playerList.playerList.count
     }
+    // TODO: Figure out showing position
     func startGame() {
-        // TODO: figure out how to simulate round
-        // idea: make a game for each number of people?
-        // can't find commonality
-        // maybe enum?
-        // start a hand
-        // start a betting round
-        // clear results
         for i in 0...gameVar.playerList.playerList.count - 1 {
             gameVar.playerList.playerList[i].fold = false
         }
@@ -41,9 +35,6 @@ class ServerGameHandling: ObservableObject {
             gameVar.playerList.playerList[i].raiseSize = 0.0
         }
         if gameVar.playerList.playerList.count == 3 {
-            var player1Idx: Int = 0
-            var player2Idx: Int = 1
-            var player3Idx: Int = 2
             countTurn = countPlayingPlayer()
             self.serverHandleClient(action: ClientAction(betSize: 0, clientAction: .pending))
         }
@@ -128,29 +119,6 @@ class ServerGameHandling: ObservableObject {
     
     func serverHandleSelf(action: ClientAction) {
         serverHandleClient(action: action)
-        /*
-        if action.betSize != self.bettingSize {
-            self.bettingSize = action.betSize
-        }
-        switch action.clientAction {
-        case .call:
-            gameVar.playerList.playerList[0].chip = gameVar.playerList.playerList[0].chip - self.bettingSize
-        case .raise:
-            gameVar.playerList.playerList[0].chip = gameVar.playerList.playerList[0].chip - self.bettingSize
-            self.countTurn += gameVar.playerList.playerList.count
-        case .check:
-            return
-        case .fold:
-            return
-        case .pending:
-            return
-        }
-        gameVar.buttonCall = true
-        gameVar.buttonRaise = true
-        gameVar.buttonCheck = true
-        gameVar.buttonFold = true
-        self.server.sendPlayerList()
-        self.serverHandleClient(action: action)*/
     }
     
 }

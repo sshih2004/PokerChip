@@ -15,6 +15,9 @@ struct ContentView: View {
     @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
     @State var hostDisabled: Bool = false
     @State var nameDisabled: Bool = false
+    @State var searchDisabled: Bool = false
+    @State var searchGameStr: String = "Search for games"
+    @State var hostGameAlert = false
     
     var body: some View {
         List {
@@ -26,6 +29,10 @@ struct ContentView: View {
                         .disabled(nameDisabled)
                 }
                 Button {
+                    if gameVar.name.isEmpty {
+                        hostGameAlert = true
+                        return
+                    }
                     gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100, position: "Unknown"))
                     server.setVar(gameVar: gameVar)
                     server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
@@ -60,15 +67,22 @@ struct ContentView: View {
             Section("JOIN GAME") {
                 VStack {
                     Button {
+                        if gameVar.name.isEmpty {
+                            hostGameAlert = true
+                            return
+                        }
                         client.setVar(gameVar: gameVar)
                         client.startBrowsing()
+                        searchGameStr = "Searching..."
+                        searchDisabled = true
                     } label: {
                         HStack {
                             Spacer()
-                            Text("Search for games")
+                            Text(searchGameStr)
                             Spacer()
                         }
                     }
+                    .disabled(searchDisabled)
                     Spacer()
                 }
             }
@@ -103,6 +117,10 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
             Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar), client: client)
         })
+        .alert("Name Required", isPresented: $hostGameAlert) {
+            Button("OK", role: .cancel) {
+            }
+        }
     }
 }
 

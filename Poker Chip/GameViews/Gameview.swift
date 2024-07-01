@@ -15,6 +15,7 @@ struct Gameview: View {
     @State var raiseAlert: Bool = false
     var body: some View {
         VStack {
+            // TODO: Figure out how to show action
             List(gameVar.playerList.playerList) { player in
                 PlayerListRow(player: player, bb: true)
             }

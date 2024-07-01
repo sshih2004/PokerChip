@@ -6,7 +6,7 @@ class PeerBrowser: ObservableObject {
     var connection: NWConnection?
     @Published var messages: [String] = []
     var gameVar: GameVariables?
-    var results: [NWBrowser.Result] = [NWBrowser.Result]()
+    @Published var results: [NWBrowser.Result] = [NWBrowser.Result]()
     
     
     func setVar(gameVar: GameVariables) {
