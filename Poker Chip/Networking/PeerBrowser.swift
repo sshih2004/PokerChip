@@ -138,7 +138,7 @@ class PeerBrowser: ObservableObject {
                                                   metadata: [message1])
         // Send the app content along with the message.
         
-        let content = Player(name: gameVar!.name, chip: 100, position: "Unknown")
+        let content = Player(name: gameVar!.name, chip: 100)
         let encoder = JSONEncoder()
         // Send the app content along with the message.let encoder = JSONEncoder()
         do {

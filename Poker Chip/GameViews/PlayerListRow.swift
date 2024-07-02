@@ -14,7 +14,7 @@ struct PlayerListRow: View {
         VStack {
             HStack {
                 Text(player.name)
-                Text("Position: " + player.position)
+                Text(player.position)
                 Text("Chip: " + String(player.chip))
             }
             if !player.actionStr.isEmpty {

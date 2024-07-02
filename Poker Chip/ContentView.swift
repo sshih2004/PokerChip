@@ -33,7 +33,7 @@ struct ContentView: View {
                         hostGameAlert = true
                         return
                     }
-                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100, position: "Unknown"))
+                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100))
                     server.setVar(gameVar: gameVar)
                     server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
                     server.startListening()
