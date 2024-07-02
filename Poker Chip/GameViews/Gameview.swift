@@ -21,6 +21,9 @@ struct Gameview: View {
                 PlayerListRow(player: player, bb: true)
             }
             Spacer()
+            Text("Pot: " + String(gameVar.playerList.pot))
+            .font(.title2)
+            .padding(.bottom, 7)
             if gameVar.isServer {
                 HStack {
                     Picker("Choose a winner", selection: $winner) {
@@ -31,8 +34,8 @@ struct Gameview: View {
                                 .tag(player.name)
                         }
                     }
+                    .padding(.leading, 15)
                     .disabled(gameVar.selectWinner)
-                    .padding(.leading, 5.0)
                     .onChange(of: winner) { oldValue, newValue in
                         self.serverGameHandling.handleWinner(winnerName: self.winner)
                         self.winner = "Select a Winner"
@@ -46,10 +49,10 @@ struct Gameview: View {
                     .padding(.trailing, 30.0)
                     .disabled(gameVar.buttonStart)
                 }
+                .padding(.bottom, 8)
+                .padding(.trailing, 10)
+                .padding(.leading, 13)
             }
-            Text("Pot: " + String(gameVar.playerList.pot
-                                 ))
-                .font(.title2)
             Spacer()
             HStack {
                 Spacer()
