@@ -17,6 +17,12 @@ struct PlayerListRow: View {
                 Text("Position: " + player.position)
                 Text("Chip: " + String(player.chip))
             }
+            if !player.actionStr.isEmpty {
+                HStack {
+                    Text("Action: ")
+                    Text(player.actionStr)
+                }
+            }
         }
     }
 }

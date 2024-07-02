@@ -27,13 +27,13 @@ class ServerGameHandling: ObservableObject {
     func startGame() {
         for i in 0...gameVar.playerList.playerList.count - 1 {
             gameVar.playerList.playerList[i].fold = false
+            gameVar.playerList.playerList[i].raiseSize = 0.0
+            gameVar.playerList.playerList[i].actionStr = ""
         }
+        gameVar.pot = 0.0
         playerIdx = 0
         prevPlayerCount = 0
         bettingSize = 0.0
-        for i in 0...gameVar.playerList.playerList.count - 1 {
-            gameVar.playerList.playerList[i].raiseSize = 0.0
-        }
         if gameVar.playerList.playerList.count == 3 {
             countTurn = countPlayingPlayer()
             self.serverHandleClient(action: ClientAction(betSize: 0, clientAction: .pending))
@@ -66,24 +66,32 @@ class ServerGameHandling: ObservableObject {
         switch action.clientAction {
         case .call:
             self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
+            self.gameVar.pot = self.gameVar.pot + self.bettingSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
             self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
+            self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.bettingSize)
         case .raise:
             // TODO: Check for raise size
-            self.gameVar.playerList.playerList[playerIdx].chip -= action.betSize
+            self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - action.betSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
+            // TODO: DOUBLE Check pot calculation
+            self.gameVar.pot = self.gameVar.pot + action.betSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
             countTurn += prevPlayerCount
             prevPlayerCount = 0
             raiseAmount = action.betSize - bettingSize
             bettingSize = action.betSize
-            self.gameVar.playerList.playerList[playerIdx].raiseSize = bettingSize
+            self.gameVar.playerList.playerList[playerIdx].raiseSize += bettingSize
+            self.gameVar.playerList.playerList[playerIdx].actionStr = "Raised " + String(self.bettingSize)
         case .check:
-            break
+            self.gameVar.playerList.playerList[playerIdx].actionStr = "Checked"
         case .fold:
             self.gameVar.playerList.playerList[playerIdx].fold = true
+            self.gameVar.playerList.playerList[playerIdx].actionStr = "Fold"
+            prevPlayerCount -= 1
         case .pending:
             prevPlayerCount -= 1
             playerIdx -= 1
             countTurn += 1
         }
+        gameVar.playerList.pot = gameVar.pot
         prevPlayerCount += 1
         playerIdx += 1
         playerIdx %= self.gameVar.playerList.playerList.count
@@ -98,11 +106,21 @@ class ServerGameHandling: ObservableObject {
                 prevPlayerCount = 0
                 bettingSize = 0.0
                 for i in 0...gameVar.playerList.playerList.count - 1 {
+                    if !gameVar.playerList.playerList[i].fold {
+                        gameVar.playerList.playerList[i].actionStr = ""
+                    }
                     gameVar.playerList.playerList[i].raiseSize = 0.0
                 }
                 self.serverHandleClient(action: ClientAction(betSize: 0, clientAction: .pending))
             } else {
                 bettingRound = 4
+                gameVar.selectWinner = false
+                /*for i in 0...gameVar.playerList.playerList.count - 1 {
+                    gameVar.playerList.playerList[i].fold = false
+                    gameVar.playerList.playerList[i].raiseSize = 0.0
+                    gameVar.playerList.playerList[i].actionStr = ""
+                }*/
+                self.server.sendPlayerList()
             }
             return
         }
@@ -119,6 +137,19 @@ class ServerGameHandling: ObservableObject {
     
     func serverHandleSelf(action: ClientAction) {
         serverHandleClient(action: action)
+    }
+    
+    func handleWinner(winnerName: String) {
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            if gameVar.playerList.playerList[i].name == winnerName {
+                gameVar.playerList.playerList[i].chip += gameVar.pot
+                gameVar.pot = 0.0
+                gameVar.playerList.pot = gameVar.pot
+                server.sendPlayerList()
+                gameVar.buttonStart = false
+                break
+            }
+        }
     }
     
 }

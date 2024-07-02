@@ -13,16 +13,43 @@ struct Gameview: View {
     @State var clientRaising: Double = 1.0
     var client: PeerBrowser?
     @State var raiseAlert: Bool = false
+    @State var winner: String = "Select a Winner"
     var body: some View {
         VStack {
             // TODO: Figure out how to show action
             List(gameVar.playerList.playerList) { player in
                 PlayerListRow(player: player, bb: true)
             }
-            Button("START") {
-                serverGameHandling.startGame()
+            Spacer()
+            if gameVar.isServer {
+                HStack {
+                    Picker("Choose a winner", selection: $winner) {
+                        Text("Select a Winner").tag("Select a Winner")
+                        ForEach(gameVar.playerList.playerList, id: \.self) {
+                            player in
+                            Text(player.name)
+                                .tag(player.name)
+                        }
+                    }
+                    .disabled(gameVar.selectWinner)
+                    .padding(.leading, 5.0)
+                    .onChange(of: winner) { oldValue, newValue in
+                        self.serverGameHandling.handleWinner(winnerName: self.winner)
+                        self.winner = "Select a Winner"
+                        gameVar.selectWinner = true
+                    }
+                    Spacer()
+                    Button("START") {
+                        gameVar.buttonStart = true
+                        serverGameHandling.startGame()
+                    }
+                    .padding(.trailing, 30.0)
+                    .disabled(gameVar.buttonStart)
+                }
             }
-            .disabled(!gameVar.isServer)
+            Text("Pot: " + String(gameVar.playerList.pot
+                                 ))
+                .font(.title2)
             Spacer()
             HStack {
                 Spacer()

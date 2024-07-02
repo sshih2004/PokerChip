@@ -19,9 +19,12 @@ class GameVariables: ObservableObject {
     @Published var buttonCheck: Bool = true
     @Published var buttonCall: Bool = true
     @Published var buttonRaise: Bool = true
+    @Published var selectWinner: Bool = true
+    @Published var buttonStart: Bool = false
     var pending: Bool = false
     let pendingCondition = NSCondition()
     var curAction: Action?
+    var pot: Double = 0.0
     init(name: String, chipCount: Double, devices: [String], isServer: Bool) {
         self.name = name
         self.chipCount = chipCount
