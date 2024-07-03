@@ -28,7 +28,7 @@ class GameProtocol: NWProtocolFramerImplementation {
     static let definition = NWProtocolFramer.Definition(implementation: GameProtocol.self)
 
     // Set a name for your protocol for use in debugging.
-    static var label: String { return "TicTacToe" }
+    static var label: String { return "PokerChip" }
 
     // Set the default behavior for most framing protocol functions.
     required init(framer: NWProtocolFramer.Instance) { }

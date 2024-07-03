@@ -14,16 +14,46 @@ struct Gameview: View {
     var client: PeerBrowser?
     @State var raiseAlert: Bool = false
     @State var winner: String = "Select a Winner"
+    @State var showBuyIn: Bool = false
+    @State var inGameBuyIn: Double = 0.0
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Menu("Options") {
                     Button("Buy In") {
-                        
+                        // Half Modal
+                        self.showBuyIn = true
                     }
                 }
                 .padding()
+                .sheet(isPresented: $showBuyIn, content: {
+                    VStack {
+                        Slider(value: $inGameBuyIn, in: 1...100, step: 0.5)
+                            .padding(.top, 50)
+                            .frame(height: 200.0)
+                        HStack {
+                            Spacer()
+                            Text(String(self.inGameBuyIn) + " bb")
+                                .font(.title)
+                            Spacer()
+                        }
+                        Spacer()
+                        Button(action: {
+                            if gameVar.isServer {
+                                serverGameHandling.handleServerRebuy(rebuy: self.inGameBuyIn)
+                            } else {
+                                self.client?.sendReBuyIn(rebuy: self.inGameBuyIn)
+                            }
+                            self.showBuyIn = false
+                        }, label: {
+                            Text("Buy In")
+                                .font(.title2)
+                        })
+                        .padding()
+                    }
+                    .presentationDetents([.medium])
+                })
             }
             List(gameVar.playerList.playerList) { player in
                 PlayerListRow(player: player, bb: true)

@@ -105,7 +105,12 @@ class PeerBrowser: ObservableObject {
                     do {
                         let playerList = try decoder.decode(PlayerList.self, from: content!)
                         self.gameVar?.playerList = playerList
-                        print(playerList.playerList.first!.name)
+                        for i in 0...(self.gameVar?.playerList.playerList.count)!-1 {
+                            if self.gameVar!.playerList.playerList[i].name == self.gameVar?.name {
+                                self.gameVar?.chipCount = playerList.playerList[i].chip
+                                break
+                            }
+                        }
                         
                     } catch {
                         print(error.localizedDescription)
@@ -123,6 +128,7 @@ class PeerBrowser: ObservableObject {
                 case .clientAction:
                     print("Client received client action error")
                 case .buyIn:
+                    // TODO: Implement buyin limit from server
                     break
                 }
             }
@@ -130,6 +136,24 @@ class PeerBrowser: ObservableObject {
                 // Continue to receive more messages until you receive an error.
                 self.receive()
             }
+        }
+    }
+    
+    func sendReBuyIn(rebuy: Double) {
+        // Create a message object to hold the command type.
+        let message1 = NWProtocolFramer.Message(gameMessageType: .buyIn)
+        let context = NWConnection.ContentContext(identifier: "BuyIn",
+                                                  metadata: [message1])
+        // Send the app content along with the message.
+        
+        let content = BuyIn(playerName: gameVar?.name ?? "", buyIn: rebuy)
+        let encoder = JSONEncoder()
+        // Send the app content along with the message.let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(content)
+            self.connection?.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

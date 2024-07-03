@@ -123,7 +123,6 @@ class ServerGameHandling: ObservableObject {
         self.server.sendPlayerList()
         if countTurn == 0 {
             bettingRound -= 1
-            print("HI:" + String(bettingRound))
             if bettingRound > 0 {
                 countTurn = countPlayingPlayer()
                 if countTurn == 1 {
@@ -175,6 +174,7 @@ class ServerGameHandling: ObservableObject {
         serverHandleClient(action: action)
     }
     
+    // TODO: Figure out side pots, all ins
     func handleWinner(winnerName: String) {
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == winnerName {
@@ -186,6 +186,20 @@ class ServerGameHandling: ObservableObject {
                 }
                 server.sendPlayerList()
                 gameVar.buttonStart = false
+                break
+            }
+        }
+    }
+    
+    // Maybe figure out buy in restrictions
+    func handleServerRebuy(rebuy: Double) {
+        self.gameVar.playerList.playerList[0].chip += rebuy
+    }
+    
+    func handleClientRebuy(rebuy: BuyIn) {
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            if gameVar.playerList.playerList[i].name == rebuy.playerName {
+                gameVar.playerList.playerList[i].chip += rebuy.buyIn
                 break
             }
         }

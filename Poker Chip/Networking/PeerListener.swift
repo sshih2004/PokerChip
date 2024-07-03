@@ -114,6 +114,14 @@ class PeerListener: ObservableObject {
                     }
                 case .buyIn:
                     let decoder = JSONDecoder()
+                    do {
+                        let clientBuyIn = try decoder.decode(BuyIn.self, from: content!)
+                        // TODO: add handle client action
+                        self.serverGameHandling?.handleClientRebuy(rebuy: clientBuyIn)
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                     
                 }
             }

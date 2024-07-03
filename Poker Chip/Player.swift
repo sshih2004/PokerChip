@@ -16,4 +16,5 @@ struct Player: Identifiable, Codable, Hashable {
     var fold: Bool = false
     var raiseSize: Double = 0.0
     var actionStr: String = ""
+    var listIndex: Int = 0
 }
