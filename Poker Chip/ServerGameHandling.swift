@@ -194,12 +194,14 @@ class ServerGameHandling: ObservableObject {
     // Maybe figure out buy in restrictions
     func handleServerRebuy(rebuy: Double) {
         self.gameVar.playerList.playerList[0].chip += rebuy
+        server.sendPlayerList()
     }
     
     func handleClientRebuy(rebuy: BuyIn) {
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == rebuy.playerName {
                 gameVar.playerList.playerList[i].chip += rebuy.buyIn
+                server.sendPlayerList()
                 break
             }
         }

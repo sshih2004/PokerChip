@@ -107,7 +107,7 @@ class PeerBrowser: ObservableObject {
                         self.gameVar?.playerList = playerList
                         for i in 0...(self.gameVar?.playerList.playerList.count)!-1 {
                             if self.gameVar!.playerList.playerList[i].name == self.gameVar?.name {
-                                self.gameVar?.chipCount = playerList.playerList[i].chip
+                                self.gameVar?.chipCount = playerList.playerList[i].chip + playerList.playerList[i].raiseSize
                                 break
                             }
                         }
