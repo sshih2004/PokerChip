@@ -26,7 +26,7 @@ class ServerGameHandling: ObservableObject {
         self.gameVar = gameVar
         lastPlayerIdx = gameVar.playerList.playerList.count
     }
-    // TODO: Figure out showing position, BUY IN, POSITION NAME
+    // TODO: BUY IN, MORE PLAYERS, ALL IN
     
     func fillPositionThree() {
         var idx: Int = dealerIdx

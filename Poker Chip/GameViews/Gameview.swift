@@ -16,7 +16,15 @@ struct Gameview: View {
     @State var winner: String = "Select a Winner"
     var body: some View {
         VStack {
-            // TODO: Figure out how to show action
+            HStack {
+                Spacer()
+                Menu("Options") {
+                    Button("Buy In") {
+                        
+                    }
+                }
+                .padding()
+            }
             List(gameVar.playerList.playerList) { player in
                 PlayerListRow(player: player, bb: true)
             }

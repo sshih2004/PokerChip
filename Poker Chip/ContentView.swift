@@ -21,6 +21,14 @@ struct ContentView: View {
     
     var body: some View {
         List {
+            Section("BUY IN") {
+                Slider(value: $gameVar.buyIn, in: 1...100, step: 0.5)
+                HStack {
+                    Spacer()
+                    Text(String(gameVar.buyIn) + " bb")
+                    Spacer()
+                }
+            }
             Section("HOST GAME") {
                 HStack {
                     Text("Your Name")
@@ -33,7 +41,7 @@ struct ContentView: View {
                         hostGameAlert = true
                         return
                     }
-                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: 100))
+                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn))
                     server.setVar(gameVar: gameVar)
                     server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
                     server.startListening()

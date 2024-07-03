@@ -23,6 +23,7 @@
 		E4D75AC02C23C09E004D0FD8 /* GameProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75ABF2C23C09E004D0FD8 /* GameProtocol.swift */; };
 		E4D75AC22C276CF6004D0FD8 /* ClientAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AC12C276CF6004D0FD8 /* ClientAction.swift */; };
 		E4D75AC42C27732D004D0FD8 /* ServerGameHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AC32C27732D004D0FD8 /* ServerGameHandling.swift */; };
+		E4D75AC62C34EF18004D0FD8 /* BuyIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75AC52C34EF18004D0FD8 /* BuyIn.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		E4D75ABF2C23C09E004D0FD8 /* GameProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProtocol.swift; sourceTree = "<group>"; };
 		E4D75AC12C276CF6004D0FD8 /* ClientAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientAction.swift; sourceTree = "<group>"; };
 		E4D75AC32C27732D004D0FD8 /* ServerGameHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerGameHandling.swift; sourceTree = "<group>"; };
+		E4D75AC52C34EF18004D0FD8 /* BuyIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyIn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 			children = (
 				E4D75A9B2C1DE3B8004D0FD8 /* Gameview.swift */,
 				E4D75A9F2C1DE6F9004D0FD8 /* PlayerListRow.swift */,
+				E4D75AC52C34EF18004D0FD8 /* BuyIn.swift */,
 			);
 			path = GameViews;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				E4D75AC02C23C09E004D0FD8 /* GameProtocol.swift in Sources */,
 				E4D75AC22C276CF6004D0FD8 /* ClientAction.swift in Sources */,
 				E4D75AC42C27732D004D0FD8 /* ServerGameHandling.swift in Sources */,
+				E4D75AC62C34EF18004D0FD8 /* BuyIn.swift in Sources */,
 				E4D75AB82C1E4A37004D0FD8 /* ContentView.swift in Sources */,
 				E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */,
 				E4D75A9E2C1DE64E004D0FD8 /* Player.swift in Sources */,

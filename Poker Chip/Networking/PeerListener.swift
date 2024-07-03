@@ -112,6 +112,9 @@ class PeerListener: ObservableObject {
                     } catch {
                         print(error.localizedDescription)
                     }
+                case .buyIn:
+                    let decoder = JSONDecoder()
+                    
                 }
             }
             if error == nil {

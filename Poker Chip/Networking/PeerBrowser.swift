@@ -122,6 +122,8 @@ class PeerBrowser: ObservableObject {
                     }
                 case .clientAction:
                     print("Client received client action error")
+                case .buyIn:
+                    break
                 }
             }
             if error == nil {
@@ -138,7 +140,7 @@ class PeerBrowser: ObservableObject {
                                                   metadata: [message1])
         // Send the app content along with the message.
         
-        let content = Player(name: gameVar!.name, chip: 100)
+        let content = Player(name: gameVar!.name, chip: gameVar!.buyIn)
         let encoder = JSONEncoder()
         // Send the app content along with the message.let encoder = JSONEncoder()
         do {
