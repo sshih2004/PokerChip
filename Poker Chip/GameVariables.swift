@@ -22,6 +22,7 @@ class GameVariables: ObservableObject {
     @Published var selectWinner: Bool = true
     @Published var buttonStart: Bool = false
     @Published var buyIn: Double = 100.0
+    @Published var leftPlayers: PlayerList = PlayerList()
     var pending: Bool = false
     let pendingCondition = NSCondition()
     var curAction: Action?

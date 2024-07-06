@@ -48,6 +48,7 @@ class ServerGameHandling: ObservableObject {
         gameVar.pot += smallBlind + bigBlind
         gameVar.playerList.pot = gameVar.pot
     }
+    
     func startGame() {
         for i in 0...gameVar.playerList.playerList.count - 1 {
             gameVar.playerList.playerList[i].fold = false
@@ -81,6 +82,7 @@ class ServerGameHandling: ObservableObject {
         }
         return cntPlayingPlayer
     }
+    
     func serverHandleClient(action: ClientAction) {
         print(playerIdx)
         gameVar.buttonCall = true
@@ -134,6 +136,14 @@ class ServerGameHandling: ObservableObject {
                     return
                 }
                 playerIdx = dealerIdx + 1
+                playerIdx %= self.gameVar.playerList.playerList.count
+                for _ in 0...gameVar.playerList.playerList.count - 1 {
+                    if !gameVar.playerList.playerList[playerIdx].fold {
+                        break
+                    }
+                    playerIdx += 1
+                    playerIdx %= self.gameVar.playerList.playerList.count
+                }
                 if bettingRound >= 4 {
                     playerIdx += 2
                 }
@@ -164,6 +174,7 @@ class ServerGameHandling: ObservableObject {
             playerIdx %= self.gameVar.playerList.playerList.count
         }
         if playerIdx != 0 {
+            print("Sent request to " + String(playerIdx))
             server.requestAction(idx: playerIdx - 1, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: false, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
         } else {
             self.handleServerAction(action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: false, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
@@ -194,6 +205,7 @@ class ServerGameHandling: ObservableObject {
     // Maybe figure out buy in restrictions
     func handleServerRebuy(rebuy: Double) {
         self.gameVar.playerList.playerList[0].chip += rebuy
+        self.gameVar.playerList.playerList[0].buyIn += rebuy
         server.sendPlayerList()
     }
     
@@ -201,6 +213,21 @@ class ServerGameHandling: ObservableObject {
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == rebuy.playerName {
                 gameVar.playerList.playerList[i].chip += rebuy.buyIn
+                gameVar.playerList.playerList[i].buyIn += rebuy.buyIn
+                server.sendPlayerList()
+                break
+            }
+        }
+    }
+    
+    func handleClientLeave(name: String) {
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            if gameVar.playerList.playerList[i].name == name {
+                gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn)
+                gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
+                gameVar.playerList.playerList.remove(at: i)
+                server.connections[i-1].cancel()
+                server.connections.remove(at: i-1)
                 server.sendPlayerList()
                 break
             }

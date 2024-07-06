@@ -96,19 +96,19 @@ class PeerListener: ObservableObject {
                     do {
                         let clientAction = try decoder.decode(ClientAction.self, from: content!)
                         // TODO: add handle client action
+                        let framerMessage = NWProtocolFramer.Message(gameMessageType: .action)
+                        let context = NWConnection.ContentContext(identifier: "Action",
+                                                                  metadata: [framerMessage])
+                        let encoder = JSONEncoder()
+                        // lock all buttons after successfully receiving action
+                        do {
+                            let data = try encoder.encode(Action(playerList: self.gameVar!.playerList, betSize: self.serverGameHandling!.bettingSize, optionCall: true, optionRaise: true, optionCheck: true, optionFold: true))
+                            connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                         self.serverGameHandling?.serverHandleClient(action: clientAction)
                         
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    let framerMessage = NWProtocolFramer.Message(gameMessageType: .action)
-                    let context = NWConnection.ContentContext(identifier: "Action",
-                                                              metadata: [framerMessage])
-                    let encoder = JSONEncoder()
-                    // lock all buttons after successfully receiving action
-                    do {
-                        let data = try encoder.encode(Action(playerList: self.gameVar!.playerList, betSize: self.serverGameHandling!.bettingSize, optionCall: true, optionRaise: true, optionCheck: true, optionFold: true))
-                        connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
                     } catch {
                         print(error.localizedDescription)
                     }
@@ -122,6 +122,11 @@ class PeerListener: ObservableObject {
                     } catch {
                         print(error.localizedDescription)
                     }
+                    
+                case .leave:
+                    let decoder = JSONDecoder()
+                    let leaveName = String(decoding: content!, as: UTF8.self)
+                    self.serverGameHandling?.handleClientLeave(name: leaveName)
                     
                 }
             }

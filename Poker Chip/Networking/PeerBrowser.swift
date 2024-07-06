@@ -130,6 +130,8 @@ class PeerBrowser: ObservableObject {
                 case .buyIn:
                     // TODO: Implement buyin limit from server
                     break
+                case .leave:
+                    print("Client received incorrect leave game message")
                 }
             }
             if error == nil {
@@ -164,7 +166,7 @@ class PeerBrowser: ObservableObject {
                                                   metadata: [message1])
         // Send the app content along with the message.
         
-        let content = Player(name: gameVar!.name, chip: gameVar!.buyIn)
+        let content = Player(name: gameVar!.name, chip: gameVar!.buyIn, buyIn: gameVar!.buyIn)
         let encoder = JSONEncoder()
         // Send the app content along with the message.let encoder = JSONEncoder()
         do {
@@ -183,7 +185,15 @@ class PeerBrowser: ObservableObject {
                                                   metadata: [message1])
         // Send the app content along with the message.
         connection?.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+    }
     
+    func sendLeaveGame(playerName: String) {
+        // Create a message object to hold the command type.
+        let message1 = NWProtocolFramer.Message(gameMessageType: .leave)
+        let context = NWConnection.ContentContext(identifier: "Leave",
+                                                  metadata: [message1])
+        // Send the app content along with the message.
+        connection?.send(content: playerName.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
     }
     
     func handleAction(action: Action) {

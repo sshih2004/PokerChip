@@ -16,6 +16,7 @@ struct PlayerListRow: View {
                 Text(player.name)
                 Text(player.position)
                 Text("Chip: " + String(player.chip))
+                //Text("Buy in: " + String(player.buyIn))
             }
             if !player.actionStr.isEmpty {
                 HStack {

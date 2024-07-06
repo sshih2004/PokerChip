@@ -16,6 +16,8 @@ struct Gameview: View {
     @State var winner: String = "Select a Winner"
     @State var showBuyIn: Bool = false
     @State var inGameBuyIn: Double = 0.0
+    @State var cashOutAlert: Bool = false
+    @State var leftPlayerView: Bool = false
     var body: some View {
         VStack {
             HStack {
@@ -25,7 +27,30 @@ struct Gameview: View {
                         // Half Modal
                         self.showBuyIn = true
                     }
+                    Button("Cash Out") {
+                        cashOutAlert = true
+                    }
+                    Button("Left Players") {
+                        leftPlayerView = true
+                    }
                 }
+                .sheet(isPresented: $leftPlayerView, content: {
+                    List(gameVar.leftPlayers.playerList) { player in
+                        PlayerListRow(player: player, bb: true)
+                    }
+                    .presentationDragIndicator(.visible)
+                })
+                .alert("Cash Out", isPresented: $cashOutAlert, actions: {
+                    Button("Leave Game", role: .destructive) {
+                        self.client?.sendLeaveGame(playerName: gameVar.name)
+                                gameVar.fullScreen = false
+                            }
+                    Button("Cancel", role: .cancel) {
+                        
+                    }
+                }, message: {
+                    Text(String(gameVar.chipCount-gameVar.buyIn))
+                })
                 .padding()
                 .sheet(isPresented: $showBuyIn, content: {
                     VStack {
@@ -53,6 +78,7 @@ struct Gameview: View {
                         .padding()
                     }
                     .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
                 })
             }
             List(gameVar.playerList.playerList) { player in
