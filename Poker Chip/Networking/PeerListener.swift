@@ -124,7 +124,6 @@ class PeerListener: ObservableObject {
                     }
                     
                 case .leave:
-                    let decoder = JSONDecoder()
                     let leaveName = String(decoding: content!, as: UTF8.self)
                     self.serverGameHandling?.handleClientLeave(name: leaveName)
                     

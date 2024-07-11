@@ -52,6 +52,7 @@ class ServerGameHandling: ObservableObject {
     func startGame() {
         for i in 0...gameVar.playerList.playerList.count - 1 {
             gameVar.playerList.playerList[i].fold = false
+            gameVar.playerList.playerList[i].potLimit = 0.0
             gameVar.playerList.playerList[i].raiseSize = 0.0
             gameVar.playerList.playerList[i].actionStr = ""
             gameVar.playerList.playerList[i].position = ""
@@ -61,6 +62,8 @@ class ServerGameHandling: ObservableObject {
         if gameVar.playerList.playerList.count >= 3 {
             fillPositionThree()
             self.serverHandleClient(action: ClientAction(betSize: 0, clientAction: .pending))
+        } else {
+            gameVar.buttonStart = false
         }
     }
     
@@ -157,6 +160,7 @@ class ServerGameHandling: ObservableObject {
                         }
                     }
                     if bettingRound < 4 {
+                        gameVar.playerList.playerList[i].potLimit += gameVar.playerList.playerList[i].raiseSize
                         gameVar.playerList.playerList[i].raiseSize = 0.0
                     }
                 }

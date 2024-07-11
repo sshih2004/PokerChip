@@ -15,6 +15,7 @@ struct Player: Identifiable, Codable, Hashable {
     var position: String = ""
     var fold: Bool = false
     var raiseSize: Double = 0.0
+    var potLimit: Double = 0.0
     var actionStr: String = ""
     var listIndex: Int = 0
     var buyIn: Double = 0.0

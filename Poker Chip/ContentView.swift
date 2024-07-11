@@ -18,6 +18,7 @@ struct ContentView: View {
     @State var searchDisabled: Bool = false
     @State var searchGameStr: String = "Search for games"
     @State var hostGameAlert = false
+    @State var debugNetworkMessage = false
     
     var body: some View {
         List {
@@ -109,17 +110,19 @@ struct ContentView: View {
                 }
                 .frame(height: 300.0)
             }
-            Section("Log Client Message") {
-                List(client.messages, id: \.self) { message in
+            if debugNetworkMessage {
+                Section("Log Client Message") {
+                    List(client.messages, id: \.self) { message in
                         Text(message)
+                    }
+                    .frame(height: 300.0)
                 }
-                .frame(height: 300.0)
-            }
-            Section("Log Server Message") {
-                List(server.messages, id: \.self) { message in
+                Section("Log Server Message") {
+                    List(server.messages, id: \.self) { message in
                         Text(message)
+                    }
+                    .frame(height: 300.0)
                 }
-                .frame(height: 300.0)
             }
         }
         .fullScreenCover(isPresented: $gameVar.fullScreen, content: {

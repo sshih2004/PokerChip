@@ -42,9 +42,13 @@ struct Gameview: View {
                 })
                 .alert("Cash Out", isPresented: $cashOutAlert, actions: {
                     Button("Leave Game", role: .destructive) {
-                        self.client?.sendLeaveGame(playerName: gameVar.name)
-                                gameVar.fullScreen = false
-                            }
+                        if gameVar.isServer {
+                            // TODO: Handle Server Leave Game
+                        } else {
+                            self.client?.sendLeaveGame(playerName: gameVar.name)
+                            gameVar.fullScreen = false
+                        }
+                    }
                     Button("Cancel", role: .cancel) {
                         
                     }
@@ -68,6 +72,7 @@ struct Gameview: View {
                             if gameVar.isServer {
                                 serverGameHandling.handleServerRebuy(rebuy: self.inGameBuyIn)
                             } else {
+                                gameVar.buyIn += self.inGameBuyIn
                                 self.client?.sendReBuyIn(rebuy: self.inGameBuyIn)
                             }
                             self.showBuyIn = false
