@@ -26,7 +26,7 @@ class ServerGameHandling: ObservableObject {
         self.gameVar = gameVar
         lastPlayerIdx = gameVar.playerList.playerList.count
     }
-    // TODO: BUY IN, MORE PLAYERS, ALL IN
+    // TODO: HANDLE CALL ALL IN
     
     func fillPositionThree() {
         var idx: Int = dealerIdx
@@ -79,7 +79,7 @@ class ServerGameHandling: ObservableObject {
     func countPlayingPlayer() -> Int {
         var cntPlayingPlayer: Int = 0
         for player in gameVar.playerList.playerList {
-            if !player.fold {
+            if !player.fold && player.chip > 0 {
                 cntPlayingPlayer += 1
             }
         }
@@ -131,6 +131,12 @@ class ServerGameHandling: ObservableObject {
             if bettingRound > 0 {
                 countTurn = countPlayingPlayer()
                 if countTurn == 1 {
+                    if bettingRound < 4 {
+                        for i in 0...gameVar.playerList.playerList.count - 1 {
+                            gameVar.playerList.playerList[i].potLimit += gameVar.playerList.playerList[i].raiseSize
+                            gameVar.playerList.playerList[i].raiseSize = 0.0
+                        }
+                    }
                     countTurn = 0
                     bettingRound = 5
                     gameVar.selectWinner = false
@@ -173,13 +179,18 @@ class ServerGameHandling: ObservableObject {
             }
             return
         }
-        if gameVar.playerList.playerList[playerIdx].fold {
-            playerIdx += 1
-            playerIdx %= self.gameVar.playerList.playerList.count
+        if gameVar.playerList.playerList[playerIdx].fold || gameVar.playerList.playerList[playerIdx].chip <= 0 {
+            for _ in 0...gameVar.playerList.playerList.count - 1 {
+                if !gameVar.playerList.playerList[playerIdx].fold {
+                    break
+                }
+                playerIdx += 1
+                playerIdx %= self.gameVar.playerList.playerList.count
+            }
         }
         if playerIdx != 0 {
             print("Sent request to " + String(playerIdx))
-            server.requestAction(idx: playerIdx - 1, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: false, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
+            server.requestAction(idx: playerIdx - 1, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: bettingSize >= self.gameVar.playerList.playerList[playerIdx].chip + self.gameVar.playerList.playerList[playerIdx].raiseSize, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
         } else {
             self.handleServerAction(action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: false, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
         }
@@ -193,14 +204,24 @@ class ServerGameHandling: ObservableObject {
     func handleWinner(winnerName: String) {
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == winnerName {
-                gameVar.playerList.playerList[i].chip += gameVar.pot
-                gameVar.pot = 0.0
-                gameVar.playerList.pot = gameVar.pot
-                for i in 0...gameVar.playerList.playerList.count - 1 {
-                    gameVar.playerList.playerList[i].actionStr = ""
+                for j in 0...gameVar.playerList.playerList.count-1 {
+                    gameVar.playerList.playerList[i].chip += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
+                    gameVar.pot -= min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
+                    if gameVar.pot <= 0 {
+                        break
+                    }
                 }
+                if gameVar.pot <= 0 {
+                    for i in 0...gameVar.playerList.playerList.count - 1 {
+                        gameVar.playerList.playerList[i].actionStr = ""
+                    }
+                    gameVar.selectWinner = true
+                    gameVar.buttonStart = false
+                } else {
+                    gameVar.remainingPotAlert = true
+                }
+                gameVar.playerList.pot = gameVar.pot
                 server.sendPlayerList()
-                gameVar.buttonStart = false
                 break
             }
         }

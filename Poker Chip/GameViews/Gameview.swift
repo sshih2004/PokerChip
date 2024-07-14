@@ -16,7 +16,6 @@ struct Gameview: View {
     @State var winner: String = "Select a Winner"
     @State var showBuyIn: Bool = false
     @State var inGameBuyIn: Double = 0.0
-    @State var cashOutAlert: Bool = false
     @State var leftPlayerView: Bool = false
     var body: some View {
         VStack {
@@ -28,7 +27,7 @@ struct Gameview: View {
                         self.showBuyIn = true
                     }
                     Button("Cash Out") {
-                        cashOutAlert = true
+                        gameVar.cashOutAlert = true
                     }
                     Button("Left Players") {
                         leftPlayerView = true
@@ -40,7 +39,7 @@ struct Gameview: View {
                     }
                     .presentationDragIndicator(.visible)
                 })
-                .alert("Cash Out", isPresented: $cashOutAlert, actions: {
+                .alert("Cash Out", isPresented: $gameVar.cashOutAlert, actions: {
                     Button("Leave Game", role: .destructive) {
                         if gameVar.isServer {
                             // TODO: Handle Server Leave Game
@@ -51,6 +50,18 @@ struct Gameview: View {
                     }
                     Button("Cancel", role: .cancel) {
                         
+                    }
+                }, message: {
+                    Text(String(gameVar.chipCount-gameVar.buyIn))
+                })
+                .alert("Force Cash Out", isPresented: $gameVar.forceCashOutAlert, actions: {
+                    Button("Leave Game", role: .cancel) {
+                        if gameVar.isServer {
+                            // TODO: Handle Server Leave Game
+                        } else {
+                            self.client?.sendLeaveGame(playerName: gameVar.name)
+                            gameVar.fullScreen = false
+                        }
                     }
                 }, message: {
                     Text(String(gameVar.chipCount-gameVar.buyIn))
@@ -86,8 +97,20 @@ struct Gameview: View {
                     .presentationDragIndicator(.visible)
                 })
             }
+            /*
             List(gameVar.playerList.playerList) { player in
                 PlayerListRow(player: player, bb: true)
+            }*/
+            List {
+                ForEach(gameVar.playerList.playerList, id: \.self) { element in
+                        PlayerListRow(player: element, bb: true)
+                }
+                .onDelete(perform: { indexSet in
+                    for idx in indexSet {
+                        serverGameHandling.server.sendLeaveGame(idx: idx-1, playerName: "")
+                        serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
+                    }
+                })
             }
             Spacer()
             Text("Pot: " + String(gameVar.playerList.pot))
@@ -103,12 +126,17 @@ struct Gameview: View {
                                 .tag(player.name)
                         }
                     }
+                    .alert("Remaining Pot", isPresented: $gameVar.remainingPotAlert, actions: {
+                        Button("Cancel", role: .cancel) {
+                        }
+                    }, message: {
+                        Text("Select Next Winner")
+                    })
                     .padding(.leading, 15)
                     .disabled(gameVar.selectWinner)
                     .onChange(of: winner) { oldValue, newValue in
                         self.serverGameHandling.handleWinner(winnerName: self.winner)
                         self.winner = "Select a Winner"
-                        gameVar.selectWinner = true
                     }
                     Spacer()
                     Button("START") {

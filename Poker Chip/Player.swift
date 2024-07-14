@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftData
 
 struct Player: Identifiable, Codable, Hashable {
     var id: UUID = UUID()

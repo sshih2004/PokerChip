@@ -78,9 +78,12 @@ class PeerBrowser: ObservableObject {
                 self.sendStartGame()
                 self.receive()
             case .failed(let error):
+                self.gameVar?.fullScreen = false
                 DispatchQueue.main.async {
                     self.messages.append("Client failed with error: \(error)")
                 }
+            case .cancelled:
+                self.gameVar?.forceCashOutAlert = true
             default:
                 break
             }
@@ -131,7 +134,7 @@ class PeerBrowser: ObservableObject {
                     // TODO: Implement buyin limit from server
                     break
                 case .leave:
-                    print("Client received incorrect leave game message")
+                    self.connection?.cancel()
                 }
             }
             if error == nil {

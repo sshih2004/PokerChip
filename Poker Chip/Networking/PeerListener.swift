@@ -168,6 +168,15 @@ class PeerListener: ObservableObject {
         }
     }
     
+    func sendLeaveGame(idx: Int, playerName: String) {
+        // Create a message object to hold the command type.
+        let message1 = NWProtocolFramer.Message(gameMessageType: .leave)
+        let context = NWConnection.ContentContext(identifier: "Leave",
+                                                  metadata: [message1])
+        // Send the app content along with the message.
+        connections[idx].send(content: playerName.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+    }
+    
     private func send(message: String) {
         for connection in self.connections {
             // Create a message object to hold the command type.
