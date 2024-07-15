@@ -7,8 +7,11 @@
 
 import SwiftUI
 import Network
+import SwiftData
 
 struct ContentView: View {
+    @Query var playerRecords: [PlayerRecord]
+    @Environment(\.modelContext) var modelContext
     @ObservedObject var server = PeerListener()
     @State var devices: [String] = [String]()
     @ObservedObject var client = PeerBrowser()
@@ -19,6 +22,9 @@ struct ContentView: View {
     @State var searchGameStr: String = "Search for games"
     @State var hostGameAlert = false
     @State var debugNetworkMessage = false
+    @State var inputName: String = ""
+    @AppStorage("PrevName") var selectionPlayer: String = ""
+    let defaults = UserDefaults.standard
     
     var body: some View {
         List {
@@ -30,14 +36,42 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-            Section("HOST GAME") {
+            Section("YOUR NAME") {
+                Picker(selection: $selectionPlayer) {
+                    if selectionPlayer.isEmpty {
+                        Text("").tag("")
+                    }
+                    ForEach(playerRecords) {
+                        playerRecord in
+                        Text(playerRecord.playerName)
+                            .tag(playerRecord.playerName)
+                    }
+                } label: {
+                    Text("Select Your Name")
+                }
+                .onChange(of: selectionPlayer, { oldValue, newValue in
+                        defaults.set(selectionPlayer, forKey: "PrevName")
+                })
+
                 HStack {
-                    Text("Your Name")
-                    TextField("Name", text: $gameVar.name)
+                    Text("Add New Name")
+                    TextField("Name", text: $inputName)
                         .multilineTextAlignment(.trailing)
                         .disabled(nameDisabled)
                 }
+                HStack {
+                    Spacer()
+                    Button("Add") {
+                        modelContext.insert(PlayerRecord(playerName: inputName))
+                        self.selectionPlayer = self.inputName
+                        defaults.set(self.selectionPlayer, forKey: "PrevName")
+                    }
+                    Spacer()
+                }
+            }
+            Section("HOST GAME") {
                 Button {
+                    gameVar.name = selectionPlayer
                     if gameVar.name.isEmpty {
                         hostGameAlert = true
                         return
@@ -76,6 +110,7 @@ struct ContentView: View {
             Section("JOIN GAME") {
                 VStack {
                     Button {
+                        gameVar.name = selectionPlayer
                         if gameVar.name.isEmpty {
                             hostGameAlert = true
                             return
