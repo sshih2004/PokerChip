@@ -12,6 +12,7 @@ struct Player: Identifiable, Codable, Hashable {
     var id: UUID = UUID()
     var name: String
     var chip: Double
+    var playerRecord: PlayerRecord?
     var position: String = ""
     var fold: Bool = false
     var raiseSize: Double = 0.0
