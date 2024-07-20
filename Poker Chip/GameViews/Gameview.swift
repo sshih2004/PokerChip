@@ -113,11 +113,13 @@ struct Gameview: View {
                             
                         }
                     }
-                    .onDelete(perform: { indexSet in
-                        for idx in indexSet {
-                            serverGameHandling.server.sendLeaveGame(idx: idx-1, playerName: "")
-                            serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
-                        }
+                    .if(gameVar.isServer, transform: { view in
+                        view.onDelete(perform: { indexSet in
+                            for idx in indexSet {
+                                serverGameHandling.server.sendLeaveGame(idx: idx-1, playerName: "")
+                                serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
+                            }
+                        })
                     })
                 }
                 /*.navigationDestination(for: PlayerRecord.self, destination: { Hashable in
@@ -221,6 +223,12 @@ struct Gameview: View {
                 Spacer()
             }
         }
+    }
+}
+
+extension View {
+    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        condition ? AnyView(transform(self)) : AnyView(self)
     }
 }
 
