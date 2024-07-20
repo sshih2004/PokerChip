@@ -7,6 +7,7 @@ class PeerBrowser: ObservableObject {
     @Published var messages: [String] = []
     var gameVar: GameVariables?
     @Published var results: [NWBrowser.Result] = [NWBrowser.Result]()
+    var playerRecord: PlayerRecord?
     
     
     func setVar(gameVar: GameVariables) {
@@ -111,6 +112,7 @@ class PeerBrowser: ObservableObject {
                         for i in 0...(self.gameVar?.playerList.playerList.count)!-1 {
                             if self.gameVar!.playerList.playerList[i].name == self.gameVar?.name {
                                 self.gameVar?.chipCount = playerList.playerList[i].chip + playerList.playerList[i].raiseSize
+                                self.playerRecord?.update(to: playerList.playerList[i].playerRecord!)
                                 break
                             }
                         }
@@ -169,7 +171,7 @@ class PeerBrowser: ObservableObject {
                                                   metadata: [message1])
         // Send the app content along with the message.
         
-        let content = Player(name: gameVar!.name, chip: gameVar!.buyIn, buyIn: gameVar!.buyIn)
+        let content = Player(name: gameVar!.name, chip: gameVar!.buyIn, playerRecord: playerRecord ?? PlayerRecord(playerName: "Unavailable"), buyIn: gameVar!.buyIn)
         let encoder = JSONEncoder()
         // Send the app content along with the message.let encoder = JSONEncoder()
         do {

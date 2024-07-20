@@ -50,16 +50,17 @@ class ServerGameHandling: ObservableObject {
     }
     
     func startGame() {
-        for i in 0...gameVar.playerList.playerList.count - 1 {
-            gameVar.playerList.playerList[i].fold = false
-            gameVar.playerList.playerList[i].potLimit = 0.0
-            gameVar.playerList.playerList[i].raiseSize = 0.0
-            gameVar.playerList.playerList[i].actionStr = ""
-            gameVar.playerList.playerList[i].position = ""
-        }
-        gameVar.pot = 0.0
-        prevPlayerCount = 0
         if gameVar.playerList.playerList.count >= 3 {
+            for i in 0...gameVar.playerList.playerList.count - 1 {
+                gameVar.playerList.playerList[i].fold = false
+                gameVar.playerList.playerList[i].potLimit = 0.0
+                gameVar.playerList.playerList[i].raiseSize = 0.0
+                gameVar.playerList.playerList[i].actionStr = ""
+                gameVar.playerList.playerList[i].position = ""
+                gameVar.playerList.playerList[i].playerRecord?.handCount += 1
+            }
+            gameVar.pot = 0.0
+            prevPlayerCount = 0
             fillPositionThree()
             self.serverHandleClient(action: ClientAction(betSize: 0, clientAction: .pending))
         } else {
@@ -87,7 +88,8 @@ class ServerGameHandling: ObservableObject {
     }
     
     func serverHandleClient(action: ClientAction) {
-        print(playerIdx)
+        // print(playerIdx)
+        self.gameVar.playerList.playerList[playerIdx].curPlayerAnimation = false
         gameVar.buttonCall = true
         gameVar.buttonRaise = true
         gameVar.buttonCheck = true
@@ -98,10 +100,13 @@ class ServerGameHandling: ObservableObject {
             self.gameVar.pot = self.gameVar.pot + self.bettingSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
             self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
             self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.bettingSize)
+            self.gameVar.playerList.playerList[playerIdx].playerRecord?.callCount += 1
+            if bettingRound >= 4 {
+                self.gameVar.playerList.playerList[playerIdx].VPIPCurRound = true
+            }
         case .raise:
             // TODO: Check for raise size
             self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - action.betSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
-            // TODO: DOUBLE Check pot calculation
             self.gameVar.pot = self.gameVar.pot + action.betSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
             countTurn += prevPlayerCount
             prevPlayerCount = 0
@@ -109,6 +114,11 @@ class ServerGameHandling: ObservableObject {
             bettingSize = action.betSize
             self.gameVar.playerList.playerList[playerIdx].raiseSize += bettingSize
             self.gameVar.playerList.playerList[playerIdx].actionStr = "Raised " + String(self.bettingSize)
+            self.gameVar.playerList.playerList[playerIdx].playerRecord?.raiseCount += 1
+            if bettingRound >= 4 {
+                self.gameVar.playerList.playerList[playerIdx].PFRCurRound = true
+                self.gameVar.playerList.playerList[playerIdx].VPIPCurRound = true
+            }
         case .check:
             self.gameVar.playerList.playerList[playerIdx].actionStr = "Checked"
         case .fold:
@@ -188,8 +198,10 @@ class ServerGameHandling: ObservableObject {
                 playerIdx %= self.gameVar.playerList.playerList.count
             }
         }
+        self.gameVar.playerList.playerList[playerIdx].curPlayerAnimation = true
+        server.sendPlayerList()
         if playerIdx != 0 {
-            print("Sent request to " + String(playerIdx))
+            // print("Sent request to " + String(playerIdx))
             server.requestAction(idx: playerIdx - 1, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: bettingSize >= self.gameVar.playerList.playerList[playerIdx].chip + self.gameVar.playerList.playerList[playerIdx].raiseSize, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
         } else {
             self.handleServerAction(action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: false, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
@@ -200,12 +212,24 @@ class ServerGameHandling: ObservableObject {
         serverHandleClient(action: action)
     }
     
-    // TODO: Figure out side pots, all ins
     func handleWinner(winnerName: String) {
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            if gameVar.playerList.playerList[i].PFRCurRound {
+                gameVar.playerList.playerList[i].playerRecord?.PFR += 1
+                gameVar.playerList.playerList[i].PFRCurRound = false
+            }
+            if gameVar.playerList.playerList[i].VPIPCurRound {
+                gameVar.playerList.playerList[i].playerRecord?.VPIP += 1
+                gameVar.playerList.playerList[i].VPIPCurRound = false
+            }
+        }
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == winnerName {
                 for j in 0...gameVar.playerList.playerList.count-1 {
                     gameVar.playerList.playerList[i].chip += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
+                    if i != j {
+                        gameVar.playerList.playerList[i].playerRecord?.playerTotalWinnings += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
+                    }
                     gameVar.pot -= min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
                     if gameVar.pot <= 0 {
                         break

@@ -10,21 +10,46 @@ import SwiftUI
 struct PlayerListRow: View {
     var player: Player
     var bb: Bool
+    @State var popUpEnable: Bool = false
+    @State var animationEnable: Bool = false
     var body: some View {
         VStack {
             HStack {
                 Text(player.name)
-                Text(player.position)
+                    .frame(width: 50, alignment: .leading)
                 Text("Chip: " + String(player.chip))
+                    .frame(width: 100, alignment: .leading)
+                Spacer()
+                Text(player.position)
+                    .frame(width: 50, alignment: .trailing)
                 //Text("Buy in: " + String(player.buyIn))
+                Button(action: {
+                    popUpEnable = true
+                }, label: {
+                    Image(systemName: "info.circle")
+                })
+                .popover(isPresented: $popUpEnable, content: {
+                    PlayerStatsView(playerRecord: player.playerRecord)
+                })
             }
             if !player.actionStr.isEmpty {
                 HStack {
-                    Text("Action: ")
+                    Spacer()
                     Text(player.actionStr)
+                        .frame(width: 150, alignment: .trailing)
+                        .padding(.trailing, 30)
                 }
+                .fontWeight(.bold)
+                .padding(.top, 15)
             }
         }
+        .opacity(player.curPlayerAnimation ? (animationEnable ? 1.0 : 0.0) : 1.0)
+        .animation(.easeOut(duration: 1).repeatForever(), value: animationEnable)
+        .onAppear(perform: {
+            withAnimation {
+                animationEnable = true
+            }
+        })
     }
 }
 

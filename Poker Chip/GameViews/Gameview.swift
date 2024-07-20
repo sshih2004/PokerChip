@@ -17,6 +17,7 @@ struct Gameview: View {
     @State var showBuyIn: Bool = false
     @State var inGameBuyIn: Double = 0.0
     @State var leftPlayerView: Bool = false
+    
     var body: some View {
         VStack {
             HStack {
@@ -101,16 +102,27 @@ struct Gameview: View {
             List(gameVar.playerList.playerList) { player in
                 PlayerListRow(player: player, bb: true)
             }*/
-            List {
-                ForEach(gameVar.playerList.playerList, id: \.self) { element in
-                        PlayerListRow(player: element, bb: true)
-                }
-                .onDelete(perform: { indexSet in
-                    for idx in indexSet {
-                        serverGameHandling.server.sendLeaveGame(idx: idx-1, playerName: "")
-                        serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
+            NavigationStack {
+                List {
+                    ForEach(gameVar.playerList.playerList, id: \.self) { element in
+                        HStack {
+                            PlayerListRow(player: element, bb: true)
+                            //NavigationLink(value: element.playerRecord) {
+                            //}
+                            //.frame(width: 100)
+                            
+                        }
                     }
-                })
+                    .onDelete(perform: { indexSet in
+                        for idx in indexSet {
+                            serverGameHandling.server.sendLeaveGame(idx: idx-1, playerName: "")
+                            serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
+                        }
+                    })
+                }
+                /*.navigationDestination(for: PlayerRecord.self, destination: { Hashable in
+                    Text(Hashable.playerName)
+                })*/
             }
             Spacer()
             Text("Pot: " + String(gameVar.playerList.pot))

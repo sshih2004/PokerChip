@@ -20,4 +20,7 @@ struct Player: Identifiable, Codable, Hashable {
     var actionStr: String = ""
     var listIndex: Int = 0
     var buyIn: Double = 0.0
+    var curPlayerAnimation: Bool = false
+    var VPIPCurRound: Bool = false
+    var PFRCurRound: Bool = false
 }

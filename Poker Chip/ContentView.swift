@@ -62,6 +62,10 @@ struct ContentView: View {
                 HStack {
                     Spacer()
                     Button("Add") {
+                        if inputName.isEmpty {
+                            hostGameAlert = true
+                            return
+                        }
                         modelContext.insert(PlayerRecord(playerName: inputName))
                         self.selectionPlayer = self.inputName
                         defaults.set(self.selectionPlayer, forKey: "PrevName")
@@ -76,7 +80,14 @@ struct ContentView: View {
                         hostGameAlert = true
                         return
                     }
-                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn, buyIn: gameVar.buyIn))
+                    var playerToSend: PlayerRecord = PlayerRecord(playerName: "INVALID")
+                    for playerRecord in playerRecords {
+                        // TODO: Find player and send, figure out updating
+                        if playerRecord.playerName == selectionPlayer {
+                            playerToSend = playerRecord
+                        }
+                    }
+                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn, playerRecord: playerToSend, buyIn: gameVar.buyIn))
                     server.setVar(gameVar: gameVar)
                     server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
                     server.startListening()
@@ -134,6 +145,14 @@ struct ContentView: View {
                 List(client.results, id: \.self) { result in
                     if case let NWEndpoint.service(name: name, type: _, domain: _, interface: _) = result.endpoint {
                         Button(name) {
+                            var playerToSend: PlayerRecord = PlayerRecord(playerName: "INVALID")
+                            for playerRecord in playerRecords {
+                                // TODO: Find player and send, figure out updating
+                                if playerRecord.playerName == selectionPlayer {
+                                    playerToSend = playerRecord
+                                }
+                            }
+                            client.playerRecord = playerToSend
                             client.connect(to: result.endpoint)
                             gameVar.fullScreen = true
                             nameDisabled = true
