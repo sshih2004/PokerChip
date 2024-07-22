@@ -27,11 +27,18 @@ struct Gameview: View {
                         // Half Modal
                         self.showBuyIn = true
                     }
-                    Button("Cash Out") {
-                        gameVar.cashOutAlert = true
+                    if !gameVar.isServer {
+                        Button("Cash Out") {
+                            gameVar.cashOutAlert = true
+                        }
                     }
-                    Button("Left Players") {
-                        leftPlayerView = true
+                    if gameVar.isServer {
+                        Button("Left Players") {
+                            leftPlayerView = true
+                        }
+                        Button("End Game") {
+                            serverGameHandling.cashOutAll()
+                        }
                     }
                 }
                 .sheet(isPresented: $leftPlayerView, content: {
@@ -58,10 +65,10 @@ struct Gameview: View {
                 .alert("Force Cash Out", isPresented: $gameVar.forceCashOutAlert, actions: {
                     Button("Leave Game", role: .cancel) {
                         if gameVar.isServer {
-                            // TODO: Handle Server Leave Game
+                            serverGameHandling.serverEndGame()
                         } else {
-                            self.client?.sendLeaveGame(playerName: gameVar.name)
                             gameVar.fullScreen = false
+                            gameVar.cashOutFullScreen = true
                         }
                     }
                 }, message: {
@@ -113,10 +120,9 @@ struct Gameview: View {
                             
                         }
                     }
-                    .if(gameVar.isServer, transform: { view in
+                    .if(gameVar.isServer && !gameVar.inGame, transform: { view in
                         view.onDelete(perform: { indexSet in
                             for idx in indexSet {
-                                serverGameHandling.server.sendLeaveGame(idx: idx-1, playerName: "")
                                 serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
                             }
                         })

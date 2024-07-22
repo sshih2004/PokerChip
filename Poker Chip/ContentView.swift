@@ -16,7 +16,6 @@ struct ContentView: View {
     @State var devices: [String] = [String]()
     @ObservedObject var client = PeerBrowser()
     @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
-    @State var hostDisabled: Bool = false
     @State var nameDisabled: Bool = false
     @State var searchDisabled: Bool = false
     @State var searchGameStr: String = "Search for games"
@@ -88,10 +87,11 @@ struct ContentView: View {
                         }
                     }
                     gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn, playerRecord: playerToSend, buyIn: gameVar.buyIn))
+                    gameVar.chipCount = gameVar.buyIn
                     server.setVar(gameVar: gameVar)
                     server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
                     server.startListening()
-                    hostDisabled = true
+                    gameVar.hostDisabled = true
                     nameDisabled = true
                     gameVar.fullScreen = true
                     gameVar.isServer = true
@@ -103,11 +103,11 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
-                .disabled(hostDisabled)
+                .disabled(gameVar.hostDisabled)
                 Button {
                     server.setVar(gameVar: gameVar)
                     server.stopListening()
-                    hostDisabled = false
+                    gameVar.hostDisabled = false
                     
                 } label: {
                     HStack {
@@ -116,7 +116,7 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
-                .disabled(!hostDisabled)
+                .disabled(!gameVar.hostDisabled)
             }
             Section("JOIN GAME") {
                 VStack {
@@ -181,6 +181,9 @@ struct ContentView: View {
         }
         .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
             Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar), client: client)
+        })
+        .fullScreenCover(isPresented: $gameVar.cashOutFullScreen, content: {
+            CashOutView(gameVar: self.gameVar)
         })
         .alert("Name Required", isPresented: $hostGameAlert) {
             Button("OK", role: .cancel) {

@@ -15,10 +15,12 @@ class PeerListener: ObservableObject {
     func stopListening() {
         if let listener = listener {
             listener.cancel()
+            connections.removeAll()
         }
     }
     func startListening() {
         do {
+            connections = [NWConnection]()
             
             listener = try NWListener(using: NWParameters())
             
@@ -160,7 +162,7 @@ class PeerListener: ObservableObject {
             let encoder = JSONEncoder()
             // Send the app content along with the message.let encoder = JSONEncoder()
             do {
-                let data = try encoder.encode(self.gameVar!.playerList)
+                let data = try encoder.encode(self.gameVar?.playerList ?? PlayerList())
                 connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
             } catch {
                 print(error.localizedDescription)
@@ -168,13 +170,24 @@ class PeerListener: ObservableObject {
         }
     }
     
-    func sendLeaveGame(idx: Int, playerName: String) {
-        // Create a message object to hold the command type.
-        let message1 = NWProtocolFramer.Message(gameMessageType: .leave)
+    func sendLeaveGame(idx: Int) {
+        let framerMessage = NWProtocolFramer.Message(gameMessageType: .leave)
         let context = NWConnection.ContentContext(identifier: "Leave",
-                                                  metadata: [message1])
-        // Send the app content along with the message.
-        connections[idx].send(content: playerName.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+                                                  metadata: [framerMessage])
+        let encoder = JSONEncoder()
+        // Send the app content along with the message.let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(self.gameVar?.leftPlayers ?? PlayerList())
+            connections[idx].send(content: data, contentContext: context, isComplete: true, completion: .contentProcessed({ error in
+                if let sendError = error {
+                    print("Send failed with error: \(String(describing: error))")
+                } else {
+                    self.connections[idx].cancel()
+                }
+            }))
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     private func send(message: String) {

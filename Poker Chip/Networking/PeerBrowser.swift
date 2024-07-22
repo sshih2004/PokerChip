@@ -136,7 +136,15 @@ class PeerBrowser: ObservableObject {
                     // TODO: Implement buyin limit from server
                     break
                 case .leave:
-                    self.connection?.cancel()
+                    let decoder = JSONDecoder()
+                    do {
+                        let leftPlayers = try decoder.decode(PlayerList.self, from: content!)
+                        self.gameVar?.leftPlayers = leftPlayers
+                        self.connection?.cancel()
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             }
             if error == nil {

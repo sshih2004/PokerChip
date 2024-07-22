@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E42841222C447A24009C95E2 /* PlayerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42841212C447A24009C95E2 /* PlayerRecord.swift */; };
 		E42841242C49C1C5009C95E2 /* PlayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42841232C49C1C5009C95E2 /* PlayerStatsView.swift */; };
+		E42841262C4DB275009C95E2 /* CashOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42841252C4DB275009C95E2 /* CashOutView.swift */; };
 		E4D75A8D2C1DE388004D0FD8 /* Poker_ChipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */; };
 		E4D75A912C1DE389004D0FD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D75A902C1DE389004D0FD8 /* Assets.xcassets */; };
 		E4D75A942C1DE389004D0FD8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D75A932C1DE389004D0FD8 /* Preview Assets.xcassets */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		E42841212C447A24009C95E2 /* PlayerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRecord.swift; sourceTree = "<group>"; };
 		E42841232C49C1C5009C95E2 /* PlayerStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatsView.swift; sourceTree = "<group>"; };
+		E42841252C4DB275009C95E2 /* CashOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashOutView.swift; sourceTree = "<group>"; };
 		E4D75A892C1DE388004D0FD8 /* Poker Chip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Poker Chip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poker_ChipApp.swift; sourceTree = "<group>"; };
 		E4D75A902C1DE389004D0FD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				E4D75AB72C1E4A37004D0FD8 /* ContentView.swift */,
 				E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */,
 				E42841212C447A24009C95E2 /* PlayerRecord.swift */,
+				E42841252C4DB275009C95E2 /* CashOutView.swift */,
 				E4D75AA32C1E2D50004D0FD8 /* Networking */,
 				E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */,
 				E4D75A9D2C1DE64E004D0FD8 /* Player.swift */,
@@ -214,6 +217,7 @@
 				E4D75AB62C1E48B7004D0FD8 /* TestEasyView.swift in Sources */,
 				E4D75A9E2C1DE64E004D0FD8 /* Player.swift in Sources */,
 				E4D75A9C2C1DE3B8004D0FD8 /* Gameview.swift in Sources */,
+				E42841262C4DB275009C95E2 /* CashOutView.swift in Sources */,
 				E4D75A8D2C1DE388004D0FD8 /* Poker_ChipApp.swift in Sources */,
 				E4D75AA62C1E2D69004D0FD8 /* PeerListener.swift in Sources */,
 				E42841242C49C1C5009C95E2 /* PlayerStatsView.swift in Sources */,

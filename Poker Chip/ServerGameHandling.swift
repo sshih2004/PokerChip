@@ -51,6 +51,7 @@ class ServerGameHandling: ObservableObject {
     
     func startGame() {
         if gameVar.playerList.playerList.count >= 3 {
+            gameVar.inGame = true
             for i in 0...gameVar.playerList.playerList.count - 1 {
                 gameVar.playerList.playerList[i].fold = false
                 gameVar.playerList.playerList[i].potLimit = 0.0
@@ -241,6 +242,8 @@ class ServerGameHandling: ObservableObject {
                     }
                     gameVar.selectWinner = true
                     gameVar.buttonStart = false
+                    gameVar.inGame = false
+                    gameVar.chipCount = gameVar.playerList.playerList[0].chip
                 } else {
                     gameVar.remainingPotAlert = true
                 }
@@ -274,13 +277,32 @@ class ServerGameHandling: ObservableObject {
             if gameVar.playerList.playerList[i].name == name {
                 gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn)
                 gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
+                server.sendLeaveGame(idx: i-1)
                 gameVar.playerList.playerList.remove(at: i)
-                server.connections[i-1].cancel()
-                server.connections.remove(at: i-1)
                 server.sendPlayerList()
                 break
             }
         }
+    }
+    
+    func cashOutAll() {
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn)
+            gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
+        }
+        for i in 1...gameVar.playerList.playerList.count-1 {
+            server.sendLeaveGame(idx: i-1)
+        }
+        gameVar.playerList.playerList.removeAll()
+        gameVar.forceCashOutAlert = true
+    }
+    
+    func serverEndGame() {
+        gameVar.fullScreen = false
+        gameVar.cashOutFullScreen = true
+        server.stopListening()
+        gameVar.hostDisabled = false
+        countTurn = 0
     }
     
 }
