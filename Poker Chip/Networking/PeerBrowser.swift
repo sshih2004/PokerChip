@@ -140,6 +140,7 @@ class PeerBrowser: ObservableObject {
                     do {
                         let leftPlayers = try decoder.decode(PlayerList.self, from: content!)
                         self.gameVar?.leftPlayers = leftPlayers
+                        self.gameVar?.cashOutFullScreen = true
                         self.connection?.cancel()
                         
                     } catch {

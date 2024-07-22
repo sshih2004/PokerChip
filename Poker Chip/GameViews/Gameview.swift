@@ -53,7 +53,6 @@ struct Gameview: View {
                             // TODO: Handle Server Leave Game
                         } else {
                             self.client?.sendLeaveGame(playerName: gameVar.name)
-                            gameVar.fullScreen = false
                         }
                     }
                     Button("Cancel", role: .cancel) {
@@ -62,13 +61,13 @@ struct Gameview: View {
                 }, message: {
                     Text(String(gameVar.chipCount-gameVar.buyIn))
                 })
-                .alert("Force Cash Out", isPresented: $gameVar.forceCashOutAlert, actions: {
+                .alert("Cash Out", isPresented: $gameVar.forceCashOutAlert, actions: {
                     Button("Leave Game", role: .cancel) {
                         if gameVar.isServer {
                             serverGameHandling.serverEndGame()
                         } else {
                             gameVar.fullScreen = false
-                            gameVar.cashOutFullScreen = true
+                            //gameVar.cashOutFullScreen = true
                         }
                     }
                 }, message: {
@@ -165,6 +164,12 @@ struct Gameview: View {
                     }
                     .padding(.trailing, 30.0)
                     .disabled(gameVar.buttonStart)
+                    .alert("Invalid Player in Game", isPresented: $gameVar.invalidPlayerAlert) {
+                        
+                    } message: {
+                        Text("Please remove players without any chip or have them buy in to start game.")
+                    }
+
                 }
                 .padding(.bottom, 8)
                 .padding(.trailing, 10)

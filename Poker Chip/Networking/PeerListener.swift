@@ -170,7 +170,7 @@ class PeerListener: ObservableObject {
         }
     }
     
-    func sendLeaveGame(idx: Int) {
+    func sendLeaveGame(idx: Int, removeFromConnections: Bool) {
         let framerMessage = NWProtocolFramer.Message(gameMessageType: .leave)
         let context = NWConnection.ContentContext(identifier: "Leave",
                                                   metadata: [framerMessage])
@@ -179,10 +179,13 @@ class PeerListener: ObservableObject {
         do {
             let data = try encoder.encode(self.gameVar?.leftPlayers ?? PlayerList())
             connections[idx].send(content: data, contentContext: context, isComplete: true, completion: .contentProcessed({ error in
-                if let sendError = error {
+                if error != nil {
                     print("Send failed with error: \(String(describing: error))")
                 } else {
                     self.connections[idx].cancel()
+                    if removeFromConnections {
+                        self.connections.remove(at: idx)
+                    }
                 }
             }))
         } catch {

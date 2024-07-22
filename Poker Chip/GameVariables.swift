@@ -29,6 +29,7 @@ class GameVariables: ObservableObject {
     @Published var cashOutFullScreen: Bool = false
     @Published var inGame: Bool = false
     @Published var hostDisabled: Bool = false
+    @Published var invalidPlayerAlert: Bool = false
     var pending: Bool = false
     let pendingCondition = NSCondition()
     var curAction: Action?

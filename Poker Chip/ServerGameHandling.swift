@@ -50,6 +50,13 @@ class ServerGameHandling: ObservableObject {
     }
     
     func startGame() {
+        for i in 0...gameVar.playerList.playerList.count - 1 {
+            if gameVar.playerList.playerList[i].chip <= 0 {
+                gameVar.invalidPlayerAlert = true
+                gameVar.buttonStart = false
+                return
+            }
+        }
         if gameVar.playerList.playerList.count >= 3 {
             gameVar.inGame = true
             for i in 0...gameVar.playerList.playerList.count - 1 {
@@ -277,7 +284,7 @@ class ServerGameHandling: ObservableObject {
             if gameVar.playerList.playerList[i].name == name {
                 gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn)
                 gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
-                server.sendLeaveGame(idx: i-1)
+                server.sendLeaveGame(idx: i-1, removeFromConnections: true)
                 gameVar.playerList.playerList.remove(at: i)
                 server.sendPlayerList()
                 break
@@ -291,7 +298,7 @@ class ServerGameHandling: ObservableObject {
             gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
         }
         for i in 1...gameVar.playerList.playerList.count-1 {
-            server.sendLeaveGame(idx: i-1)
+            server.sendLeaveGame(idx: i-1, removeFromConnections: false)
         }
         gameVar.playerList.playerList.removeAll()
         gameVar.forceCashOutAlert = true
