@@ -47,27 +47,22 @@ struct Gameview: View {
                     }
                     .presentationDragIndicator(.visible)
                 })
-                .alert("Cash Out", isPresented: $gameVar.cashOutAlert, actions: {
-                    Button("Leave Game", role: .destructive) {
-                        if gameVar.isServer {
-                            // TODO: Handle Server Leave Game
-                        } else {
-                            self.client?.sendLeaveGame(playerName: gameVar.name)
-                        }
+                .alert("Confirm Leave Game?", isPresented: $gameVar.cashOutAlert, actions: {
+                    Button("Leave", role: .destructive) {
+                        self.client?.sendLeaveGame(playerName: gameVar.name)
                     }
                     Button("Cancel", role: .cancel) {
                         
                     }
-                }, message: {
-                    Text(String(gameVar.chipCount-gameVar.buyIn))
                 })
                 .alert("Cash Out", isPresented: $gameVar.forceCashOutAlert, actions: {
-                    Button("Leave Game", role: .cancel) {
+                    Button("Confirm", role: .cancel) {
                         if gameVar.isServer {
                             serverGameHandling.serverEndGame()
                         } else {
+                            self.gameVar.playerList.playerList = [Player]()
                             gameVar.fullScreen = false
-                            //gameVar.cashOutFullScreen = true
+                            gameVar.cashOutFullScreen = true
                         }
                     }
                 }, message: {

@@ -300,16 +300,15 @@ class ServerGameHandling: ObservableObject {
         for i in 1...gameVar.playerList.playerList.count-1 {
             server.sendLeaveGame(idx: i-1, removeFromConnections: false)
         }
-        gameVar.playerList.playerList.removeAll()
         gameVar.forceCashOutAlert = true
     }
     
     func serverEndGame() {
+        gameVar.playerList.playerList = [Player]()
         gameVar.fullScreen = false
         gameVar.cashOutFullScreen = true
         server.stopListening()
         gameVar.hostDisabled = false
         countTurn = 0
     }
-    
 }

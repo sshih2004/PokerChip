@@ -128,12 +128,11 @@ struct ContentView: View {
                         }
                         client.setVar(gameVar: gameVar)
                         client.startBrowsing()
-                        searchGameStr = "Searching..."
                         searchDisabled = true
                     } label: {
                         HStack {
                             Spacer()
-                            Text(searchGameStr)
+                            Text(searchDisabled ? "Searching..." : "Search for games" )
                             Spacer()
                         }
                     }
@@ -154,6 +153,8 @@ struct ContentView: View {
                             }
                             client.playerRecord = playerToSend
                             client.connect(to: result.endpoint)
+                            searchDisabled = false
+                            client.results.removeAll()
                             gameVar.fullScreen = true
                             nameDisabled = true
                         }
