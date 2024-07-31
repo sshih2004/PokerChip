@@ -23,4 +23,6 @@ struct Player: Identifiable, Codable, Hashable {
     var curPlayerAnimation: Bool = false
     var VPIPCurRound: Bool = false
     var PFRCurRound: Bool = false
+    var curRoundWinningReset: Double = 0.0
+    var curRoundPlayerRecordWinningReset: Double = 0.0
 }

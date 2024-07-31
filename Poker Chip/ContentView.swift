@@ -12,10 +12,10 @@ import SwiftData
 struct ContentView: View {
     @Query var playerRecords: [PlayerRecord]
     @Environment(\.modelContext) var modelContext
-    @ObservedObject var server = PeerListener()
+    @StateObject var server = PeerListener()
     @State var devices: [String] = [String]()
-    @ObservedObject var client = PeerBrowser()
-    @ObservedObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
+    @StateObject var client = PeerBrowser()
+    @StateObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
     @State var nameDisabled: Bool = false
     @State var searchDisabled: Bool = false
     @State var searchGameStr: String = "Search for games"

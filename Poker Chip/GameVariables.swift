@@ -20,6 +20,7 @@ class GameVariables: ObservableObject {
     @Published var buttonCall: Bool = true
     @Published var buttonRaise: Bool = true
     @Published var selectWinner: Bool = true
+    @Published var undoPot: Bool = false
     @Published var buttonStart: Bool = false
     @Published var buyIn: Double = 100.0
     @Published var leftPlayers: PlayerList = PlayerList()
@@ -34,6 +35,7 @@ class GameVariables: ObservableObject {
     let pendingCondition = NSCondition()
     var curAction: Action?
     var pot: Double = 0.0
+    var potReset: Double = 0.0
     init(name: String, chipCount: Double, devices: [String], isServer: Bool) {
         self.name = name
         self.chipCount = chipCount

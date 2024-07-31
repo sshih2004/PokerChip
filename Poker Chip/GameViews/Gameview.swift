@@ -10,7 +10,7 @@ import SwiftUI
 struct Gameview: View {
     @ObservedObject var gameVar: GameVariables
     @ObservedObject var serverGameHandling: ServerGameHandling
-    @State var clientRaising: Double = 1.0
+    @State var clientRaising: Double = 2.0
     var client: PeerBrowser?
     @State var raiseAlert: Bool = false
     @State var winner: String = "Select a Winner"
@@ -21,6 +21,15 @@ struct Gameview: View {
     var body: some View {
         VStack {
             HStack {
+                if gameVar.undoPot {
+                    Button() {
+                        gameVar.undoPot = false
+                        serverGameHandling.resetHandleWinner()
+                    } label: {
+                        Text("Restore Pot")
+                            .padding()
+                    }
+                }
                 Spacer()
                 Menu("Options") {
                     Button("Buy In") {
@@ -35,6 +44,9 @@ struct Gameview: View {
                     if gameVar.isServer {
                         Button("Left Players") {
                             leftPlayerView = true
+                        }
+                        Button("End Current Hand") {
+                            serverGameHandling.serverEndHand()
                         }
                         Button("End Game") {
                             serverGameHandling.cashOutAll()
@@ -136,8 +148,10 @@ struct Gameview: View {
                         Text("Select a Winner").tag("Select a Winner")
                         ForEach(gameVar.playerList.playerList, id: \.self) {
                             player in
-                            Text(player.name)
-                                .tag(player.name)
+                            if !player.fold {
+                                Text(player.name)
+                                    .tag(player.name)
+                            }
                         }
                     }
                     .alert("Remaining Pot", isPresented: $gameVar.remainingPotAlert, actions: {
@@ -146,9 +160,9 @@ struct Gameview: View {
                     }, message: {
                         Text("Select Next Winner")
                     })
-                    .padding(.leading, 15)
                     .disabled(gameVar.selectWinner)
-                    .onChange(of: winner) { oldValue, newValue in
+                    .padding(.leading, 15)
+                    .onChange(of: winner) {
                         self.serverGameHandling.handleWinner(winnerName: self.winner)
                         self.winner = "Select a Winner"
                     }

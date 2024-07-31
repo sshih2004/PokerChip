@@ -58,6 +58,7 @@ class ServerGameHandling: ObservableObject {
             }
         }
         if gameVar.playerList.playerList.count >= 3 {
+            gameVar.undoPot = false
             gameVar.inGame = true
             for i in 0...gameVar.playerList.playerList.count - 1 {
                 gameVar.playerList.playerList[i].fold = false
@@ -104,9 +105,10 @@ class ServerGameHandling: ObservableObject {
         gameVar.buttonFold = true
         switch action.clientAction {
         case .call:
+            // TODO: figure out max call value
             self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
             self.gameVar.pot = self.gameVar.pot + self.bettingSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
-            self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
+            self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize
             self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.bettingSize)
             self.gameVar.playerList.playerList[playerIdx].playerRecord?.callCount += 1
             if bettingRound >= 4 {
@@ -144,7 +146,7 @@ class ServerGameHandling: ObservableObject {
         playerIdx %= self.gameVar.playerList.playerList.count
         countTurn -= 1
         self.server.sendPlayerList()
-        if countTurn == 0 {
+        if countTurn <= 0 {
             bettingRound -= 1
             if bettingRound > 0 {
                 countTurn = countPlayingPlayer()
@@ -221,6 +223,12 @@ class ServerGameHandling: ObservableObject {
     }
     
     func handleWinner(winnerName: String) {
+        if gameVar.pot == 0 {
+            gameVar.selectWinner = true
+            return
+        }
+        gameVar.potReset = gameVar.pot
+        gameVar.undoPot = true
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].PFRCurRound {
                 gameVar.playerList.playerList[i].playerRecord?.PFR += 1
@@ -230,12 +238,16 @@ class ServerGameHandling: ObservableObject {
                 gameVar.playerList.playerList[i].playerRecord?.VPIP += 1
                 gameVar.playerList.playerList[i].VPIPCurRound = false
             }
+            gameVar.playerList.playerList[i].curRoundWinningReset = 0.0
+            gameVar.playerList.playerList[i].curRoundPlayerRecordWinningReset = 0.0
         }
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == winnerName {
                 for j in 0...gameVar.playerList.playerList.count-1 {
                     gameVar.playerList.playerList[i].chip += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
+                    gameVar.playerList.playerList[i].curRoundWinningReset += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
                     if i != j {
+                        gameVar.playerList.playerList[i].curRoundPlayerRecordWinningReset += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
                         gameVar.playerList.playerList[i].playerRecord?.playerTotalWinnings += min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
                     }
                     gameVar.pot -= min(gameVar.playerList.playerList[j].potLimit, gameVar.playerList.playerList[i].potLimit, gameVar.pot)
@@ -259,6 +271,17 @@ class ServerGameHandling: ObservableObject {
                 break
             }
         }
+    }
+    
+    func resetHandleWinner() {
+        gameVar.pot = gameVar.potReset
+        gameVar.playerList.pot = gameVar.pot
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            gameVar.playerList.playerList[i].chip -= gameVar.playerList.playerList[i].curRoundWinningReset
+            gameVar.playerList.playerList[i].playerRecord?.playerTotalWinnings -= gameVar.playerList.playerList[i].curRoundPlayerRecordWinningReset
+        }
+        server.sendPlayerList()
+        gameVar.selectWinner = false
     }
     
     // Maybe figure out buy in restrictions
@@ -310,5 +333,24 @@ class ServerGameHandling: ObservableObject {
         server.stopListening()
         gameVar.hostDisabled = false
         countTurn = 0
+    }
+    
+    func serverEndHand() {
+        if playerIdx == 0 {
+            self.handleServerAction(action: Action(playerList: self.gameVar.playerList, betSize: self.bettingSize, optionCall: true, optionRaise: true, optionCheck: true, optionFold: true))
+        } else {
+            server.requestAction(idx: playerIdx-1, action: Action(playerList: self.gameVar.playerList, betSize: self.bettingSize, optionCall: true, optionRaise: true, optionCheck: true, optionFold: true))
+        }
+        countTurn = 0
+        bettingRound = 5
+        for i in 0...gameVar.playerList.playerList.count-1 {
+            gameVar.playerList.playerList[i].chip += gameVar.playerList.playerList[i].potLimit + gameVar.playerList.playerList[i].raiseSize
+            gameVar.playerList.playerList[i].actionStr = ""
+            gameVar.playerList.playerList[i].curPlayerAnimation = false
+        }
+        gameVar.buttonStart = false
+        gameVar.pot = 0.0
+        gameVar.playerList.pot = 0.0
+        server.sendPlayerList()
     }
 }
