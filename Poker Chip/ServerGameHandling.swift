@@ -106,11 +106,18 @@ class ServerGameHandling: ObservableObject {
         switch action.clientAction {
         case .call:
             // TODO: figure out max call value
-            self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
-            self.gameVar.pot = self.gameVar.pot + self.bettingSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
-            self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize
-            self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.bettingSize)
-            self.gameVar.playerList.playerList[playerIdx].playerRecord?.callCount += 1
+            if self.gameVar.playerList.playerList[playerIdx].chip + self.gameVar.playerList.playerList[playerIdx].raiseSize < self.bettingSize {
+                self.gameVar.pot += self.gameVar.playerList.playerList[playerIdx].chip
+                self.gameVar.playerList.playerList[playerIdx].raiseSize = self.gameVar.playerList.playerList[playerIdx].chip
+                self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.gameVar.playerList.playerList[playerIdx].chip)
+                self.gameVar.playerList.playerList[playerIdx].chip = 0
+            } else {
+                self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
+                self.gameVar.pot = self.gameVar.pot + self.bettingSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
+                self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize
+                self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.bettingSize)
+                self.gameVar.playerList.playerList[playerIdx].playerRecord?.callCount += 1
+            }
             if bettingRound >= 4 {
                 self.gameVar.playerList.playerList[playerIdx].VPIPCurRound = true
             }

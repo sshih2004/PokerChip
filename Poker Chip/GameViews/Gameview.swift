@@ -155,7 +155,7 @@ struct Gameview: View {
                         }
                     }
                     .alert("Remaining Pot", isPresented: $gameVar.remainingPotAlert, actions: {
-                        Button("Cancel", role: .cancel) {
+                        Button("OK", role: .cancel) {
                         }
                     }, message: {
                         Text("Select Next Winner")
