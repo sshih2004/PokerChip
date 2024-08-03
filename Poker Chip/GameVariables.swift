@@ -36,10 +36,12 @@ class GameVariables: ObservableObject {
     var curAction: Action?
     var pot: Double = 0.0
     var potReset: Double = 0.0
-    init(name: String, chipCount: Double, devices: [String], isServer: Bool) {
+    var bigBlind: Double
+    init(name: String, chipCount: Double, devices: [String], isServer: Bool, bigBlind: Double = 2.0) {
         self.name = name
         self.chipCount = chipCount
         self.devices = devices
         self.isServer = isServer
+        self.bigBlind = bigBlind
     }
 }

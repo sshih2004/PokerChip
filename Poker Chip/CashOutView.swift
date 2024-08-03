@@ -13,7 +13,7 @@ struct CashOutView: View {
     var body: some View {
         NavigationStack {
             List(gameVar.leftPlayers.playerList) { player in
-                PlayerListRow(player: player, bb: true)
+                PlayerListRow(player: player)
             }
             .toolbar {
                 Button("Leave") {

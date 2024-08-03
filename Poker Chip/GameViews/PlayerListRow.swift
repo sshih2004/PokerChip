@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PlayerListRow: View {
     var player: Player
-    var bb: Bool
     @State var popUpEnable: Bool = false
     @State var animationEnable: Bool = false
     var body: some View {
@@ -54,5 +53,5 @@ struct PlayerListRow: View {
 }
 
 #Preview {
-    PlayerListRow(player: Player(name: "hi", chip: 30, position: "Dealer"), bb: true)
+    PlayerListRow(player: Player(name: "hi", chip: 30, position: "Dealer"))
 }

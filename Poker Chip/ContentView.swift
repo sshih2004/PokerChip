@@ -18,10 +18,13 @@ struct ContentView: View {
     @StateObject var gameVar = GameVariables(name: "", chipCount: 100, devices: [String](), isServer: false)
     @State var nameDisabled: Bool = false
     @State var searchDisabled: Bool = false
+    @State var modifyGameSettings: Bool = false
     @State var searchGameStr: String = "Search for games"
     @State var hostGameAlert = false
     @State var debugNetworkMessage = false
     @State var inputName: String = ""
+    @State var smallBlind: Double = 1.0
+    @State var bigBlind: Double = 2.0
     @AppStorage("PrevName") var selectionPlayer: String = ""
     let defaults = UserDefaults.standard
     
@@ -75,6 +78,7 @@ struct ContentView: View {
             Section("HOST GAME") {
                 Button {
                     gameVar.name = selectionPlayer
+                    gameVar.bigBlind = self.bigBlind
                     if gameVar.name.isEmpty {
                         hostGameAlert = true
                         return
@@ -86,15 +90,17 @@ struct ContentView: View {
                             playerToSend = playerRecord
                         }
                     }
-                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn, playerRecord: playerToSend, buyIn: gameVar.buyIn))
-                    gameVar.chipCount = gameVar.buyIn
+                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn * gameVar.bigBlind, playerRecord: playerToSend, buyIn: gameVar.buyIn))
+                    gameVar.chipCount = gameVar.buyIn * gameVar.bigBlind
                     server.setVar(gameVar: gameVar)
-                    server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar)
+                    server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar, smallBlind: self.smallBlind, bigBlind: self.bigBlind)
                     server.startListening()
                     gameVar.hostDisabled = true
                     nameDisabled = true
                     gameVar.fullScreen = true
                     gameVar.isServer = true
+                    gameVar.playerList.blinds.append(smallBlind)
+                    gameVar.playerList.blinds.append(bigBlind)
                     
                 } label: {
                     HStack {
@@ -104,24 +110,44 @@ struct ContentView: View {
                     }
                 }
                 .disabled(gameVar.hostDisabled)
+                if debugNetworkMessage {
+                    Button {
+                        server.setVar(gameVar: gameVar)
+                        server.stopListening()
+                        gameVar.hostDisabled = false
+                        
+                    } label: {
+                        HStack {
+                            Spacer()
+                            Text("Stop Hosting")
+                            Spacer()
+                        }
+                    }
+                    .disabled(!gameVar.hostDisabled)
+                }
                 Button {
-                    server.setVar(gameVar: gameVar)
-                    server.stopListening()
-                    gameVar.hostDisabled = false
-                    
+                    modifyGameSettings = true
                 } label: {
                     HStack {
                         Spacer()
-                        Text("Stop Hosting")
+                        Text("Edit Host Game Settings")
                         Spacer()
                     }
                 }
-                .disabled(!gameVar.hostDisabled)
+                .disabled(gameVar.hostDisabled)
+                .fullScreenCover(isPresented: $modifyGameSettings, onDismiss: {
+                    gameVar.bigBlind = self.bigBlind
+                    gameVar.playerList.blinds.removeAll()
+                }, content: {
+                    ModifyGameSettingsView(smallBlind: $smallBlind, bigBlind: $bigBlind)
+                    
+                })
             }
             Section("JOIN GAME") {
                 VStack {
                     Button {
                         gameVar.name = selectionPlayer
+                        gameVar.bigBlind = self.bigBlind
                         if gameVar.name.isEmpty {
                             hostGameAlert = true
                             return
@@ -181,7 +207,7 @@ struct ContentView: View {
             }
         }
         .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
-            Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar), client: client)
+            Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar, smallBlind: self.smallBlind, bigBlind: self.bigBlind), client: client)
         })
         .fullScreenCover(isPresented: $gameVar.cashOutFullScreen, content: {
             CashOutView(gameVar: self.gameVar)

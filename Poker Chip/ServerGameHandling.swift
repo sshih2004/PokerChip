@@ -19,12 +19,14 @@ class ServerGameHandling: ObservableObject {
     var raiseAmount: Double = 0.0
     var bettingRound: Int = 5
     var dealerIdx: Int = 0
-    var smallBlind: Double = 1.0
-    var bigBlind: Double = 2.0
-    init(server: PeerListener, gameVar: GameVariables) {
+    var smallBlind: Double
+    var bigBlind: Double
+    init(server: PeerListener, gameVar: GameVariables, smallBlind: Double = 1.0, bigBlind: Double = 2.0) {
         self.server = server
         self.gameVar = gameVar
         lastPlayerIdx = gameVar.playerList.playerList.count
+        self.smallBlind = smallBlind
+        self.bigBlind = bigBlind
     }
     // TODO: HANDLE CALL ALL IN
     
@@ -105,11 +107,10 @@ class ServerGameHandling: ObservableObject {
         gameVar.buttonFold = true
         switch action.clientAction {
         case .call:
-            // TODO: figure out max call value
             if self.gameVar.playerList.playerList[playerIdx].chip + self.gameVar.playerList.playerList[playerIdx].raiseSize < self.bettingSize {
                 self.gameVar.pot += self.gameVar.playerList.playerList[playerIdx].chip
                 self.gameVar.playerList.playerList[playerIdx].raiseSize = self.gameVar.playerList.playerList[playerIdx].chip
-                self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.gameVar.playerList.playerList[playerIdx].chip)
+                self.gameVar.playerList.playerList[playerIdx].actionStr = "Called ALL IN"
                 self.gameVar.playerList.playerList[playerIdx].chip = 0
             } else {
                 self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
@@ -129,7 +130,7 @@ class ServerGameHandling: ObservableObject {
             prevPlayerCount = 0
             raiseAmount = action.betSize - bettingSize
             bettingSize = action.betSize
-            self.gameVar.playerList.playerList[playerIdx].raiseSize += bettingSize
+            self.gameVar.playerList.playerList[playerIdx].raiseSize = bettingSize
             self.gameVar.playerList.playerList[playerIdx].actionStr = "Raised " + String(self.bettingSize)
             self.gameVar.playerList.playerList[playerIdx].playerRecord?.raiseCount += 1
             if bettingRound >= 4 {
@@ -185,7 +186,7 @@ class ServerGameHandling: ObservableObject {
                 }
                 playerIdx %= self.gameVar.playerList.playerList.count
                 prevPlayerCount = 0
-                bettingSize = bettingRound >= 4 ? (bigBlind) : 0.0
+                bettingSize = bettingRound >= 4 ? bigBlind : 0.0
                 for i in 0...gameVar.playerList.playerList.count - 1 {
                     if !gameVar.playerList.playerList[i].fold {
                         if bettingRound < 4 {
@@ -234,6 +235,7 @@ class ServerGameHandling: ObservableObject {
             gameVar.selectWinner = true
             return
         }
+        // TODO: Figure out how to restore when pot distributed to >1 people
         gameVar.potReset = gameVar.pot
         gameVar.undoPot = true
         for i in 0...gameVar.playerList.playerList.count-1 {

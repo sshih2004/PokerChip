@@ -21,17 +21,24 @@ struct Gameview: View {
     var body: some View {
         VStack {
             HStack {
-                if gameVar.undoPot {
-                    Button() {
-                        gameVar.undoPot = false
-                        serverGameHandling.resetHandleWinner()
-                    } label: {
-                        Text("Restore Pot")
-                            .padding()
-                    }
+                Button() {
+                    gameVar.undoPot = false
+                    serverGameHandling.resetHandleWinner()
+                } label: {
+                    Text("Restore Pot")
+                }
+                .disabled(gameVar.undoPot)
+                .padding()
+                .frame(width: 125)
+                .opacity(gameVar.undoPot ? 1 : 0)
+                Spacer()
+                if gameVar.playerList.blinds.count == 2 {
+                    Text("Blinds: " + String(gameVar.playerList.blinds.first ?? 0) + " / " + String(gameVar.playerList.blinds.last ?? 0))
+                        .multilineTextAlignment(.center)
+                        .fontWeight(.bold)
                 }
                 Spacer()
-                Menu("Options") {
+                Menu {
                     Button("Buy In") {
                         // Half Modal
                         self.showBuyIn = true
@@ -52,10 +59,15 @@ struct Gameview: View {
                             serverGameHandling.cashOutAll()
                         }
                     }
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("Options")
+                    }
                 }
                 .sheet(isPresented: $leftPlayerView, content: {
                     List(gameVar.leftPlayers.playerList) { player in
-                        PlayerListRow(player: player, bb: true)
+                        PlayerListRow(player: player)
                     }
                     .presentationDragIndicator(.visible)
                 })
@@ -81,6 +93,7 @@ struct Gameview: View {
                     Text(String(gameVar.chipCount-gameVar.buyIn))
                 })
                 .padding()
+                .frame(width: 125)
                 .sheet(isPresented: $showBuyIn, content: {
                     VStack {
                         Slider(value: $inGameBuyIn, in: 1...100, step: 0.5)
@@ -88,10 +101,11 @@ struct Gameview: View {
                             .frame(height: 200.0)
                         HStack {
                             Spacer()
-                            Text(String(self.inGameBuyIn) + " bb")
-                                .font(.title)
+                            Text(String(self.inGameBuyIn))
+                            Text(" bb")
                             Spacer()
                         }
+                        .font(.title)
                         Spacer()
                         Button(action: {
                             if gameVar.isServer {
@@ -119,7 +133,7 @@ struct Gameview: View {
                 List {
                     ForEach(gameVar.playerList.playerList, id: \.self) { element in
                         HStack {
-                            PlayerListRow(player: element, bb: true)
+                            PlayerListRow(player: element)
                             //NavigationLink(value: element.playerRecord) {
                             //}
                             //.frame(width: 100)
@@ -139,9 +153,11 @@ struct Gameview: View {
                 })*/
             }
             Spacer()
-            Text("Pot: " + String(gameVar.playerList.pot))
-            .font(.title2)
-            .padding(.bottom, 7)
+            HStack {
+                Text("Pot: " + String(format: "%.2f", gameVar.playerList.pot))
+                    .font(.title2)
+                    .padding(.bottom, 7)
+            }
             if gameVar.isServer {
                 HStack {
                     Picker("Choose a winner", selection: $winner) {
@@ -226,14 +242,14 @@ struct Gameview: View {
                 .disabled(gameVar.buttonRaise)
                 .fullScreenCover(isPresented: $raiseAlert, onDismiss: {
                     if gameVar.isServer {
-                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: clientRaising, clientAction: .raise))
+                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: (clientRaising * 100).rounded() / 100, clientAction: .raise))
                         
                     } else {
-                        client?.returnAction(clientAction: ClientAction(betSize: clientRaising, clientAction: .raise))
+                        client?.returnAction(clientAction: ClientAction(betSize: (clientRaising * 100).rounded() / 100 , clientAction: .raise))
                     }
                 }) {
                     Spacer()
-                    Slider(value: $clientRaising, in: (gameVar.curAction?.betSize ?? 1)...gameVar.chipCount, step: 0.5)
+                    Slider(value: $clientRaising, in: (gameVar.curAction?.betSize ?? 1)...gameVar.chipCount, step: gameVar.bigBlind)
                     Text(String(clientRaising))
                     Spacer()
                     Button("Done") {

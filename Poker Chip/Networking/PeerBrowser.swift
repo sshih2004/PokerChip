@@ -109,6 +109,7 @@ class PeerBrowser: ObservableObject {
                     do {
                         let playerList = try decoder.decode(PlayerList.self, from: content!)
                         self.gameVar?.playerList = playerList
+                        self.gameVar?.bigBlind = playerList.blinds.last ?? 0
                         for i in 0...(self.gameVar?.playerList.playerList.count)!-1 {
                             if self.gameVar!.playerList.playerList[i].name == self.gameVar?.name {
                                 self.gameVar?.chipCount = playerList.playerList[i].chip + playerList.playerList[i].raiseSize

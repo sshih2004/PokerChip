@@ -84,7 +84,8 @@ class PeerListener: ObservableObject {
                 case .startGame:
                     let decoder = JSONDecoder()
                     do {
-                        let player = try decoder.decode(Player.self, from: content!)
+                        var player = try decoder.decode(Player.self, from: content!)
+                        player.chip = player.chip * (self.gameVar?.bigBlind ?? 0)
                         self.gameVar?.playerList.playerList.append(player)
                         self.sendPlayerList()
                         
