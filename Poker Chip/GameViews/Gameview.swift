@@ -27,13 +27,13 @@ struct Gameview: View {
                 } label: {
                     Text("Restore Pot")
                 }
-                .disabled(gameVar.undoPot)
+                .disabled(!gameVar.undoPot)
                 .padding()
                 .frame(width: 125)
                 .opacity(gameVar.undoPot ? 1 : 0)
                 Spacer()
                 if gameVar.playerList.blinds.count == 2 {
-                    Text("Blinds: " + String(gameVar.playerList.blinds.first ?? 0) + " / " + String(gameVar.playerList.blinds.last ?? 0))
+                    Text("Blinds: " + String(describing: gameVar.playerList.blinds[0]) + " / " + String(describing: gameVar.playerList.blinds[1]))
                         .multilineTextAlignment(.center)
                         .fontWeight(.bold)
                 }
@@ -90,7 +90,7 @@ struct Gameview: View {
                         }
                     }
                 }, message: {
-                    Text(String(gameVar.chipCount-gameVar.buyIn))
+                    Text(String(describing: gameVar.chipCount-Decimal(gameVar.buyInValue)))
                 })
                 .padding()
                 .frame(width: 125)
@@ -109,10 +109,10 @@ struct Gameview: View {
                         Spacer()
                         Button(action: {
                             if gameVar.isServer {
-                                serverGameHandling.handleServerRebuy(rebuy: self.inGameBuyIn)
+                                serverGameHandling.handleServerRebuy(rebuy: Decimal(self.inGameBuyIn))
                             } else {
                                 gameVar.buyIn += self.inGameBuyIn
-                                self.client?.sendReBuyIn(rebuy: self.inGameBuyIn)
+                                self.client?.sendReBuyIn(rebuy: Decimal(self.inGameBuyIn))
                             }
                             self.showBuyIn = false
                         }, label: {
@@ -154,7 +154,7 @@ struct Gameview: View {
             }
             Spacer()
             HStack {
-                Text("Pot: " + String(format: "%.2f", gameVar.playerList.pot))
+                Text("Pot: " + String(describing: gameVar.playerList.pot))
                     .font(.title2)
                     .padding(.bottom, 7)
             }
@@ -242,15 +242,15 @@ struct Gameview: View {
                 .disabled(gameVar.buttonRaise)
                 .fullScreenCover(isPresented: $raiseAlert, onDismiss: {
                     if gameVar.isServer {
-                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: (clientRaising * 100).rounded() / 100, clientAction: .raise))
+                        serverGameHandling.serverHandleSelf(action: ClientAction(betSize: Decimal(clientRaising), clientAction: .raise))
                         
                     } else {
-                        client?.returnAction(clientAction: ClientAction(betSize: (clientRaising * 100).rounded() / 100 , clientAction: .raise))
+                        client?.returnAction(clientAction: ClientAction(betSize: Decimal(clientRaising), clientAction: .raise))
                     }
                 }) {
                     Spacer()
-                    Slider(value: $clientRaising, in: (gameVar.curAction?.betSize ?? 1)...gameVar.chipCount, step: gameVar.bigBlind)
-                    Text(String(clientRaising))
+                    Slider(value: $clientRaising, in: 1...Double(truncating: gameVar.chipCount as NSNumber), step: Double(truncating: gameVar.bigBlind as NSNumber))
+                    Text(" \(clientRaising, specifier: "%.2f")")
                     Spacer()
                     Button("Done") {
                         raiseAlert = false

@@ -11,17 +11,17 @@ class ServerGameHandling: ObservableObject {
     var server: PeerListener
     var gameVar: GameVariables
     var threePlayer: [String] = ["D", "SB", "BB"]
-    var bettingSize: Double = 0.0
+    var bettingSize: Decimal = 0.0
     var playerIdx: Int = 0
     var lastPlayerIdx: Int
     var countTurn: Int = 0
     var prevPlayerCount: Int = 0
-    var raiseAmount: Double = 0.0
+    var raiseAmount: Decimal = 0.0
     var bettingRound: Int = 5
     var dealerIdx: Int = 0
-    var smallBlind: Double
-    var bigBlind: Double
-    init(server: PeerListener, gameVar: GameVariables, smallBlind: Double = 1.0, bigBlind: Double = 2.0) {
+    var smallBlind: Decimal
+    var bigBlind: Decimal
+    init(server: PeerListener, gameVar: GameVariables, smallBlind: Decimal = 1.0, bigBlind: Decimal = 2.0) {
         self.server = server
         self.gameVar = gameVar
         lastPlayerIdx = gameVar.playerList.playerList.count
@@ -37,12 +37,12 @@ class ServerGameHandling: ObservableObject {
             if i == 1 {
                 gameVar.playerList.playerList[idx].raiseSize = smallBlind
                 gameVar.playerList.playerList[idx].chip -= smallBlind
-                gameVar.playerList.playerList[idx].actionStr = "Small Blind: " + String(smallBlind)
+                gameVar.playerList.playerList[idx].actionStr = "Small Blind: " + String(describing: smallBlind)
             }
             if i == 2 {
                 gameVar.playerList.playerList[idx].raiseSize = bigBlind
                 gameVar.playerList.playerList[idx].chip -= bigBlind
-                gameVar.playerList.playerList[idx].actionStr = "Big Blind: " + String(bigBlind)
+                gameVar.playerList.playerList[idx].actionStr = "Big Blind: " + String(describing: bigBlind)
             }
             idx += 1
             idx %= self.gameVar.playerList.playerList.count
@@ -116,7 +116,7 @@ class ServerGameHandling: ObservableObject {
                 self.gameVar.playerList.playerList[playerIdx].chip = self.gameVar.playerList.playerList[playerIdx].chip - self.bettingSize + self.gameVar.playerList.playerList[playerIdx].raiseSize
                 self.gameVar.pot = self.gameVar.pot + self.bettingSize - self.gameVar.playerList.playerList[playerIdx].raiseSize
                 self.gameVar.playerList.playerList[playerIdx].raiseSize = self.bettingSize
-                self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(self.bettingSize)
+                self.gameVar.playerList.playerList[playerIdx].actionStr = "Called " + String(describing: self.bettingSize)
                 self.gameVar.playerList.playerList[playerIdx].playerRecord?.callCount += 1
             }
             if bettingRound >= 4 {
@@ -131,7 +131,7 @@ class ServerGameHandling: ObservableObject {
             raiseAmount = action.betSize - bettingSize
             bettingSize = action.betSize
             self.gameVar.playerList.playerList[playerIdx].raiseSize = bettingSize
-            self.gameVar.playerList.playerList[playerIdx].actionStr = "Raised " + String(self.bettingSize)
+            self.gameVar.playerList.playerList[playerIdx].actionStr = "Raised " + String(describing: self.bettingSize)
             self.gameVar.playerList.playerList[playerIdx].playerRecord?.raiseCount += 1
             if bettingRound >= 4 {
                 self.gameVar.playerList.playerList[playerIdx].PFRCurRound = true
@@ -294,7 +294,7 @@ class ServerGameHandling: ObservableObject {
     }
     
     // Maybe figure out buy in restrictions
-    func handleServerRebuy(rebuy: Double) {
+    func handleServerRebuy(rebuy: Decimal) {
         self.gameVar.playerList.playerList[0].chip += rebuy
         self.gameVar.playerList.playerList[0].buyIn += rebuy
         server.sendPlayerList()
@@ -314,7 +314,7 @@ class ServerGameHandling: ObservableObject {
     func handleClientLeave(name: String) {
         for i in 0...gameVar.playerList.playerList.count-1 {
             if gameVar.playerList.playerList[i].name == name {
-                gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn)
+                gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(describing: (gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn))
                 gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
                 server.sendLeaveGame(idx: i-1, removeFromConnections: true)
                 gameVar.playerList.playerList.remove(at: i)
@@ -326,11 +326,13 @@ class ServerGameHandling: ObservableObject {
     
     func cashOutAll() {
         for i in 0...gameVar.playerList.playerList.count-1 {
-            gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn)
+            gameVar.playerList.playerList[i].actionStr = "Cash Out: " + String(describing: (gameVar.playerList.playerList[i].chip - gameVar.playerList.playerList[i].buyIn))
             gameVar.leftPlayers.playerList.append(gameVar.playerList.playerList[i])
         }
-        for i in 1...gameVar.playerList.playerList.count-1 {
-            server.sendLeaveGame(idx: i-1, removeFromConnections: false)
+        if gameVar.playerList.playerList.count > 1 {
+            for i in 1...gameVar.playerList.playerList.count-1 {
+                server.sendLeaveGame(idx: i-1, removeFromConnections: false)
+            }
         }
         gameVar.forceCashOutAlert = true
     }

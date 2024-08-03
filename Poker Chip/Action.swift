@@ -9,7 +9,7 @@ import Foundation
 
 struct Action: Codable {
     var playerList: PlayerList
-    var betSize: Double
+    var betSize: Decimal
     var optionCall: Bool
     var optionRaise: Bool
     var optionCheck: Bool

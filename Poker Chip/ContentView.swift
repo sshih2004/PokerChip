@@ -78,7 +78,7 @@ struct ContentView: View {
             Section("HOST GAME") {
                 Button {
                     gameVar.name = selectionPlayer
-                    gameVar.bigBlind = self.bigBlind
+                    gameVar.bigBlind = Decimal(self.bigBlind)
                     if gameVar.name.isEmpty {
                         hostGameAlert = true
                         return
@@ -90,17 +90,18 @@ struct ContentView: View {
                             playerToSend = playerRecord
                         }
                     }
-                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: gameVar.buyIn * gameVar.bigBlind, playerRecord: playerToSend, buyIn: gameVar.buyIn))
-                    gameVar.chipCount = gameVar.buyIn * gameVar.bigBlind
+                    gameVar.buyInValue = gameVar.buyIn * Double(truncating: gameVar.bigBlind as NSNumber)
+                    gameVar.playerList.playerList.append(Player(name: gameVar.name, chip: Decimal(gameVar.buyInValue), playerRecord: playerToSend, buyIn: Decimal(gameVar.buyInValue)))
+                    gameVar.chipCount = Decimal(gameVar.buyInValue)
                     server.setVar(gameVar: gameVar)
-                    server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar, smallBlind: self.smallBlind, bigBlind: self.bigBlind)
+                    server.serverGameHandling = ServerGameHandling(server: self.server, gameVar: gameVar, smallBlind: Decimal(self.smallBlind), bigBlind: Decimal(self.bigBlind))
                     server.startListening()
                     gameVar.hostDisabled = true
                     nameDisabled = true
                     gameVar.fullScreen = true
                     gameVar.isServer = true
-                    gameVar.playerList.blinds.append(smallBlind)
-                    gameVar.playerList.blinds.append(bigBlind)
+                    gameVar.playerList.blinds.append(Decimal(smallBlind))
+                    gameVar.playerList.blinds.append(Decimal(bigBlind))
                     
                 } label: {
                     HStack {
@@ -136,7 +137,7 @@ struct ContentView: View {
                 }
                 .disabled(gameVar.hostDisabled)
                 .fullScreenCover(isPresented: $modifyGameSettings, onDismiss: {
-                    gameVar.bigBlind = self.bigBlind
+                    gameVar.bigBlind = Decimal(self.bigBlind)
                     gameVar.playerList.blinds.removeAll()
                 }, content: {
                     ModifyGameSettingsView(smallBlind: $smallBlind, bigBlind: $bigBlind)
@@ -147,7 +148,7 @@ struct ContentView: View {
                 VStack {
                     Button {
                         gameVar.name = selectionPlayer
-                        gameVar.bigBlind = self.bigBlind
+                        gameVar.bigBlind = Decimal(self.bigBlind)
                         if gameVar.name.isEmpty {
                             hostGameAlert = true
                             return
@@ -207,7 +208,7 @@ struct ContentView: View {
             }
         }
         .fullScreenCover(isPresented: $gameVar.fullScreen, content: {
-            Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar, smallBlind: self.smallBlind, bigBlind: self.bigBlind), client: client)
+            Gameview(gameVar: gameVar, serverGameHandling: server.serverGameHandling ?? ServerGameHandling(server: server, gameVar: gameVar, smallBlind: Decimal(self.smallBlind), bigBlind: Decimal(self.bigBlind)), client: client)
         })
         .fullScreenCover(isPresented: $gameVar.cashOutFullScreen, content: {
             CashOutView(gameVar: self.gameVar)

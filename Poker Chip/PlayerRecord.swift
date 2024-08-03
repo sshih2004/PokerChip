@@ -21,14 +21,14 @@ class PlayerRecord: Codable {
         case raiseCount
     }
     var playerName: String
-    var playerTotalWinnings: Double
+    var playerTotalWinnings: Decimal
     var VPIP: Double
     var PFR: Double
     var AF: Double
     var handCount: Double
     var callCount: Int
     var raiseCount: Int
-    init(playerName: String, playerTotalWinnings: Double = 0.0, VPIP: Double = 0.0, PFR: Double = 0.0, AF: Double = 0.0, threeBet: Double = 0.0, ATS: Double = 0.0, callCount: Int = 0, raiseCount: Int = 0) {
+    init(playerName: String, playerTotalWinnings: Decimal = 0.0, VPIP: Double = 0.0, PFR: Double = 0.0, AF: Double = 0.0, threeBet: Double = 0.0, ATS: Double = 0.0, callCount: Int = 0, raiseCount: Int = 0) {
         self.playerName = playerName
         self.playerTotalWinnings = playerTotalWinnings
         self.VPIP = VPIP
@@ -41,7 +41,7 @@ class PlayerRecord: Codable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         playerName = try container.decode(String.self, forKey: .playerName)
-        playerTotalWinnings = try container.decode(Double.self, forKey: .playerTotalWinnings)
+        playerTotalWinnings = try container.decode(Decimal.self, forKey: .playerTotalWinnings)
         VPIP = try container.decode(Double.self, forKey: .VPIP)
         PFR = try container.decode(Double.self, forKey: .PFR)
         AF = try container.decode(Double.self, forKey: .AF)

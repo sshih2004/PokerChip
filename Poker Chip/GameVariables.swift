@@ -9,7 +9,7 @@ import Foundation
 
 class GameVariables: ObservableObject {
     @Published var name: String
-    @Published var chipCount: Double
+    @Published var chipCount: Decimal
     @Published var devices: [String]
     @Published var isServer: Bool
     @Published var playerList: PlayerList = PlayerList()
@@ -23,6 +23,7 @@ class GameVariables: ObservableObject {
     @Published var undoPot: Bool = false
     @Published var buttonStart: Bool = false
     @Published var buyIn: Double = 100.0
+    @Published var buyInValue: Double = 100.0
     @Published var leftPlayers: PlayerList = PlayerList()
     @Published var remainingPotAlert: Bool = false
     @Published var cashOutAlert: Bool = false
@@ -34,10 +35,10 @@ class GameVariables: ObservableObject {
     var pending: Bool = false
     let pendingCondition = NSCondition()
     var curAction: Action?
-    var pot: Double = 0.0
-    var potReset: Double = 0.0
-    var bigBlind: Double
-    init(name: String, chipCount: Double, devices: [String], isServer: Bool, bigBlind: Double = 2.0) {
+    var pot: Decimal = 0.0
+    var potReset: Decimal = 0.0
+    var bigBlind: Decimal
+    init(name: String, chipCount: Decimal, devices: [String], isServer: Bool, bigBlind: Decimal = 2.0) {
         self.name = name
         self.chipCount = chipCount
         self.devices = devices

@@ -8,7 +8,7 @@
 import Foundation
 
 struct ClientAction: Codable {
-    var betSize: Double
+    var betSize: Decimal
     var clientAction: avaiAction
     enum avaiAction: String, Codable {
         case call = "call"

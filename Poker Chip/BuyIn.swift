@@ -9,5 +9,5 @@ import Foundation
 
 struct BuyIn: Codable {
     var playerName: String
-    var buyIn: Double
+    var buyIn: Decimal
 }

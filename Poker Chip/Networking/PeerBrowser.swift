@@ -123,6 +123,15 @@ class PeerBrowser: ObservableObject {
                     }
                 case .startGame:
                     self.messages.append("received start game at client")
+                    let decoder = JSONDecoder()
+                    do {
+                        let bigBlind = try decoder.decode(Decimal.self, from: content!)
+                        self.gameVar?.bigBlind = bigBlind
+                        self.gameVar?.buyInValue = (self.gameVar?.buyIn ?? 0) * Double(truncating: bigBlind as NSNumber)
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 case .action:
                     let decoder = JSONDecoder()
                     do {
@@ -155,7 +164,7 @@ class PeerBrowser: ObservableObject {
         }
     }
     
-    func sendReBuyIn(rebuy: Double) {
+    func sendReBuyIn(rebuy: Decimal) {
         // Create a message object to hold the command type.
         let message1 = NWProtocolFramer.Message(gameMessageType: .buyIn)
         let context = NWConnection.ContentContext(identifier: "BuyIn",
@@ -180,7 +189,7 @@ class PeerBrowser: ObservableObject {
                                                   metadata: [message1])
         // Send the app content along with the message.
         
-        let content = Player(name: gameVar!.name, chip: gameVar!.buyIn, playerRecord: playerRecord ?? PlayerRecord(playerName: "Unavailable"), buyIn: gameVar!.buyIn)
+        let content = Player(name: gameVar!.name, chip: Decimal(gameVar!.buyIn), playerRecord: playerRecord ?? PlayerRecord(playerName: "Unavailable"), buyIn: Decimal(gameVar!.buyIn))
         let encoder = JSONEncoder()
         // Send the app content along with the message.let encoder = JSONEncoder()
         do {

@@ -86,7 +86,18 @@ class PeerListener: ObservableObject {
                     do {
                         var player = try decoder.decode(Player.self, from: content!)
                         player.chip = player.chip * (self.gameVar?.bigBlind ?? 0)
+                        player.buyIn = player.buyIn * (self.gameVar?.bigBlind ?? 0)
                         self.gameVar?.playerList.playerList.append(player)
+                        let framerMessage = NWProtocolFramer.Message(gameMessageType: .startGame)
+                        let context = NWConnection.ContentContext(identifier: "StartGame",
+                                                                  metadata: [framerMessage])
+                        let encoder = JSONEncoder()
+                        do {
+                            let data = try encoder.encode(self.gameVar?.bigBlind)
+                            connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                         self.sendPlayerList()
                         
                     } catch {
