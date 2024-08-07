@@ -32,6 +32,7 @@ class GameVariables: ObservableObject {
     @Published var inGame: Bool = false
     @Published var hostDisabled: Bool = false
     @Published var invalidPlayerAlert: Bool = false
+    @Published var invalidPlayerNameClientAlert: Bool = false
     var pending: Bool = false
     let pendingCondition = NSCondition()
     var curAction: Action?

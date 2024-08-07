@@ -61,11 +61,22 @@ class PeerListener: ObservableObject {
     }
     
     private func handleNewConnection(_ connection: NWConnection) {
-        connection.start(queue: .main)
-        DispatchQueue.global().async {
-            self.receive(on: connection)
+        var duplicate: Bool = false
+        if !connections.isEmpty {
+            for i in 0...connections.count-1 {
+                if connections[i].endpoint == connection.endpoint {
+                    connections[i].cancel()
+                    connections[i] = connection
+                    duplicate = true
+                    break
+                }
+            }
         }
-        self.connections.append(connection)
+        connection.start(queue: .main)
+        self.receive(on: connection)
+        if !duplicate {
+            self.connections.append(connection)
+        }
     }
     
     private func receive(on connection: NWConnection) {
@@ -85,6 +96,21 @@ class PeerListener: ObservableObject {
                     let decoder = JSONDecoder()
                     do {
                         var player = try decoder.decode(Player.self, from: content!)
+                        for i in 0...(self.gameVar?.playerList.playerList.count ?? 0) - 1 {
+                            if self.gameVar?.playerList.playerList[i].name == player.name {
+                                let framerMessage = NWProtocolFramer.Message(gameMessageType: .invalid)
+                                let context = NWConnection.ContentContext(identifier: "Invalid",
+                                                                          metadata: [framerMessage])
+                                connection.send(content: player.name.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+                                for i in 0...self.connections.count-1 {
+                                    if self.connections[i] === connection {
+                                        self.connections.remove(at: i)
+                                        break
+                                    }
+                                }
+                                return
+                            }
+                        }
                         player.chip = player.chip * (self.gameVar?.bigBlind ?? 0)
                         player.buyIn = player.buyIn * (self.gameVar?.bigBlind ?? 0)
                         self.gameVar?.playerList.playerList.append(player)

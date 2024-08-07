@@ -56,7 +56,7 @@ struct ContentView: View {
                 })
 
                 HStack {
-                    Text("Add New Name")
+                    Text("Add New Player")
                     TextField("Name", text: $inputName)
                         .multilineTextAlignment(.trailing)
                         .disabled(nameDisabled)
@@ -71,6 +71,13 @@ struct ContentView: View {
                         modelContext.insert(PlayerRecord(playerName: inputName))
                         self.selectionPlayer = self.inputName
                         defaults.set(self.selectionPlayer, forKey: "PrevName")
+                    }
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    Button("Edit Local Player List") {
+                        // TODO: SwiftData EDIT
                     }
                     Spacer()
                 }
@@ -171,6 +178,7 @@ struct ContentView: View {
                 List(client.results, id: \.self) { result in
                     if case let NWEndpoint.service(name: name, type: _, domain: _, interface: _) = result.endpoint {
                         Button(name) {
+                            gameVar.name = selectionPlayer
                             var playerToSend: PlayerRecord = PlayerRecord(playerName: "INVALID")
                             for playerRecord in playerRecords {
                                 // TODO: Find player and send, figure out updating

@@ -84,7 +84,7 @@ class PeerBrowser: ObservableObject {
                     self.messages.append("Client failed with error: \(error)")
                 }
             case .cancelled:
-                self.gameVar?.forceCashOutAlert = true
+                break
             default:
                 break
             }
@@ -99,7 +99,8 @@ class PeerBrowser: ObservableObject {
             if let gameMessage = context?.protocolMetadata(definition: GameProtocol.definition) as? NWProtocolFramer.Message {
                 switch gameMessage.gameMessageType {
                 case .invalid:
-                    print("Received invalid message")
+                    self.connection?.cancel()
+                    self.gameVar?.invalidPlayerNameClientAlert = true
                 case .selectedCharacter:
                     self.messages.append("SELECTED CHARACTER")
                 case .move:
@@ -151,6 +152,7 @@ class PeerBrowser: ObservableObject {
                         let leftPlayers = try decoder.decode(PlayerList.self, from: content!)
                         self.gameVar?.leftPlayers = leftPlayers
                         self.connection?.cancel()
+                        self.gameVar?.forceCashOutAlert = true
                         
                     } catch {
                         print(error.localizedDescription)

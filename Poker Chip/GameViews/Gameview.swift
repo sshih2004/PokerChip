@@ -259,6 +259,13 @@ struct Gameview: View {
                 Spacer()
             }
         }
+        .alert("Duplicate Name", isPresented: $gameVar.invalidPlayerNameClientAlert, actions: {
+            Button("OK", role: .cancel) {
+                gameVar.fullScreen = false
+            }
+        }) {
+            Text("Please change to another name")
+        }
     }
 }
 
