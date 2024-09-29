@@ -85,6 +85,8 @@ class PeerBrowser: ObservableObject {
                 }
             case .cancelled:
                 break
+            case .waiting(_):
+                self.connection?.restart()
             default:
                 break
             }

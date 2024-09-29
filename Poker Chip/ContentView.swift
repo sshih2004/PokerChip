@@ -25,6 +25,7 @@ struct ContentView: View {
     @State var inputName: String = ""
     @State var smallBlind: Double = 1.0
     @State var bigBlind: Double = 2.0
+    @State var editPlayerRecordFull: Bool = false
     @AppStorage("PrevName") var selectionPlayer: String = ""
     let defaults = UserDefaults.standard
     
@@ -78,7 +79,11 @@ struct ContentView: View {
                     Spacer()
                     Button("Edit Local Player List") {
                         // TODO: SwiftData EDIT
+                        editPlayerRecordFull = true
                     }
+                    .fullScreenCover(isPresented: $editPlayerRecordFull, content: {
+                        EditPlayerRecordView()
+                    })
                     Spacer()
                 }
             }

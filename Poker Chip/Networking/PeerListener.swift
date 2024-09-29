@@ -72,6 +72,27 @@ class PeerListener: ObservableObject {
                 }
             }
         }
+        // TODO: TEST
+        connection.stateUpdateHandler = { state in
+            switch state {
+            case .failed(let error):
+                for i in 0...self.connections.count-1 {
+                    if self.connections[i] === connection {
+                        guard let name = self.gameVar?.playerList.playerList[i+1].name else {
+                            self.serverGameHandling?.serverEndGame()
+                            return
+                        }
+                        self.gameVar?.playerList.playerList[i+1].actionStr = "Cash Out: " + String(describing: ((self.gameVar?.playerList.playerList[i+1].chip)! - (self.gameVar?.playerList.playerList[i+1].buyIn)!))
+                        self.gameVar!.leftPlayers.playerList.append(self.gameVar!.playerList.playerList[i+1])
+                        self.gameVar!.playerList.playerList.remove(at: i+1)
+                    }
+                }
+            case .waiting(let error):
+                connection.restart()
+            default:
+                break
+            }
+        }
         connection.start(queue: .main)
         self.receive(on: connection)
         if !duplicate {
