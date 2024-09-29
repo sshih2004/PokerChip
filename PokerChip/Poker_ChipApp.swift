@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Poker_ChipApp: App {
+struct PokerChipApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

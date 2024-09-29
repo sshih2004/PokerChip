@@ -37,7 +37,7 @@
 		E42841252C4DB275009C95E2 /* CashOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashOutView.swift; sourceTree = "<group>"; };
 		E42841272C5C8A1E009C95E2 /* ModifyGameSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyGameSettingsView.swift; sourceTree = "<group>"; };
 		E4A783F12C630F3D007CEAA2 /* EditPlayerRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlayerRecordView.swift; sourceTree = "<group>"; };
-		E4D75A892C1DE388004D0FD8 /* Poker Chip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Poker Chip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4D75A892C1DE388004D0FD8 /* PokerChip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokerChip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poker_ChipApp.swift; sourceTree = "<group>"; };
 		E4D75A902C1DE389004D0FD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4D75A932C1DE389004D0FD8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 		E4D75A802C1DE388004D0FD8 = {
 			isa = PBXGroup;
 			children = (
-				E4D75A8B2C1DE388004D0FD8 /* Poker Chip */,
+				E4D75A8B2C1DE388004D0FD8 /* PokerChip */,
 				E4D75A8A2C1DE388004D0FD8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,12 +80,12 @@
 		E4D75A8A2C1DE388004D0FD8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4D75A892C1DE388004D0FD8 /* Poker Chip.app */,
+				E4D75A892C1DE388004D0FD8 /* PokerChip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E4D75A8B2C1DE388004D0FD8 /* Poker Chip */ = {
+		E4D75A8B2C1DE388004D0FD8 /* PokerChip */ = {
 			isa = PBXGroup;
 			children = (
 				E4D75AC72C35D449004D0FD8 /* BuyIn.swift */,
@@ -108,7 +108,7 @@
 				E4D75A902C1DE389004D0FD8 /* Assets.xcassets */,
 				E4D75A922C1DE389004D0FD8 /* Preview Content */,
 			);
-			path = "Poker Chip";
+			path = PokerChip;
 			sourceTree = "<group>";
 		};
 		E4D75A922C1DE389004D0FD8 /* Preview Content */ = {
@@ -142,9 +142,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4D75A882C1DE388004D0FD8 /* Poker Chip */ = {
+		E4D75A882C1DE388004D0FD8 /* PokerChip */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4D75A972C1DE389004D0FD8 /* Build configuration list for PBXNativeTarget "Poker Chip" */;
+			buildConfigurationList = E4D75A972C1DE389004D0FD8 /* Build configuration list for PBXNativeTarget "PokerChip" */;
 			buildPhases = (
 				E4D75A852C1DE388004D0FD8 /* Sources */,
 				E4D75A862C1DE388004D0FD8 /* Frameworks */,
@@ -154,9 +154,9 @@
 			);
 			dependencies = (
 			);
-			name = "Poker Chip";
+			name = PokerChip;
 			productName = "Poker Chip";
-			productReference = E4D75A892C1DE388004D0FD8 /* Poker Chip.app */;
+			productReference = E4D75A892C1DE388004D0FD8 /* PokerChip.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -174,7 +174,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E4D75A842C1DE388004D0FD8 /* Build configuration list for PBXProject "Poker Chip" */;
+			buildConfigurationList = E4D75A842C1DE388004D0FD8 /* Build configuration list for PBXProject "PokerChip" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -187,7 +187,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E4D75A882C1DE388004D0FD8 /* Poker Chip */,
+				E4D75A882C1DE388004D0FD8 /* PokerChip */,
 			);
 		};
 /* End PBXProject section */
@@ -361,7 +361,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Poker Chip/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"PokerChip/Preview Content\"";
 				DEVELOPMENT_TEAM = VAVV2BSFXT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -393,7 +393,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Poker Chip/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"PokerChip/Preview Content\"";
 				DEVELOPMENT_TEAM = VAVV2BSFXT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -421,7 +421,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4D75A842C1DE388004D0FD8 /* Build configuration list for PBXProject "Poker Chip" */ = {
+		E4D75A842C1DE388004D0FD8 /* Build configuration list for PBXProject "PokerChip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4D75A952C1DE389004D0FD8 /* Debug */,
@@ -430,7 +430,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4D75A972C1DE389004D0FD8 /* Build configuration list for PBXNativeTarget "Poker Chip" */ = {
+		E4D75A972C1DE389004D0FD8 /* Build configuration list for PBXNativeTarget "PokerChip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4D75A982C1DE389004D0FD8 /* Debug */,
