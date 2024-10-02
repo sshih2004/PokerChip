@@ -51,16 +51,21 @@ After a winner is selected, notice how all the chip transfers are completed. Als
 
 
 ## All-In Chip Calculations
-![image](https://github.com/user-attachments/assets/7f41a97d-2ac5-4af8-a0a6-4b5c0ab35987)
+
+![372710509-7f41a97d-2ac5-4af8-a0a6-4b5c0ab35987](https://github.com/user-attachments/assets/4c6fa0f5-e59f-44ab-838a-a536a702e740)
+
 Notice at the start of this game, Player 1 has less chips than Player 2.
 
-![image](https://github.com/user-attachments/assets/16c22626-1790-437c-ba68-c8aca91110f0)
+![372710629-16c22626-1790-437c-ba68-c8aca91110f0](https://github.com/user-attachments/assets/ffef4c34-df08-4645-a09e-af0a16852ce4)
+
 Here Player 1 and Player 2 both go all-in. Assuming Player 1 wins, Player 1 should not be able to take Player 2's entire stack according to Texas Hold'em Rules.
 
-![image](https://github.com/user-attachments/assets/a2b948bf-00b7-4d55-ae99-a82b65095e11)
+![372710747-a2b948bf-00b7-4d55-ae99-a82b65095e11](https://github.com/user-attachments/assets/f1df00d5-591a-47ba-935d-6492d37e6989)
+
 Therefore, after choosing Player 1, the app automatically recognizes that Player 1 cannot win the entire pot. The remainder of Player 2's stack can then be returned to Player 2.
 
-![image](https://github.com/user-attachments/assets/3d13a8fb-a53d-4d9b-bea4-efd4e473b86b)
+![372710930-3d13a8fb-a53d-4d9b-bea4-efd4e473b86b](https://github.com/user-attachments/assets/7c736884-0431-4203-a622-18a90d9e3247)
+
 Just like this, Player 2 gets their 28 back.
 
 
