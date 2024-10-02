@@ -4,7 +4,7 @@ This app fully simulates the game of Unlimited Texas Hold'em on iOS devices. Wit
 ## Screenshots Showing a Complete Game Process
 
 ![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 48 34](https://github.com/user-attachments/assets/6b434897-9de1-4300-bb1a-1c6db920d142)
-At first, one player can host a game by hitting Host Game.
+At first, one player can host a game by hitting Host Game. Every player can also decide how much chips to bring into a game through the slider on top.
 
 ![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 28](https://github.com/user-attachments/assets/27e138b8-b9b9-41d9-850f-2b6d1faf3c08)
 After a player starts hosting a game, they then create an empty game room.
@@ -38,6 +38,43 @@ The host can then select a winner through this menu.
 ![image](https://github.com/user-attachments/assets/aadecad0-f137-4ab5-a09c-5d0195f00cc4)
 After a winner is selected, notice how all the chip transfers are completed. Also keep in mind that chip counts of each players are updated instantly after a player makes an action to ensure every player in the game has the most up to date information of each player.
 
+
+## All-In Chip Calculations
+![image](https://github.com/user-attachments/assets/7f41a97d-2ac5-4af8-a0a6-4b5c0ab35987)
+Notice at the start of this game, Player 1 has less chips than Player 2.
+
+![image](https://github.com/user-attachments/assets/16c22626-1790-437c-ba68-c8aca91110f0)
+Here Player 1 and Player 2 both go all-in. Assuming Player 1 wins, Player 1 should not be able to take Player 2's entire stack according to Texas Hold'em Rules.
+
+![image](https://github.com/user-attachments/assets/a2b948bf-00b7-4d55-ae99-a82b65095e11)
+Therefore, after choosing Player 1, the app automatically recognizes that Player 1 cannot win the entire pot. The remainder of Player 2's stack can then be returned to Player 2.
+
+![image](https://github.com/user-attachments/assets/3d13a8fb-a53d-4d9b-bea4-efd4e473b86b)
+Just like this, Player 2 gets their 28 back.
+
+
+## Screenshots Showing Additional Features
+
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 51 19](https://github.com/user-attachments/assets/61b9d563-906f-4e74-a19e-ed91c5614899)
+The information icon beside each player in the game can bring up this page of statistics of a player. When playing in a game, each player's statistics is available for other players to view. This statistics is stored locally in each player's device persistently with SwiftData. Whenever a player joins a game, the statistics is sent to the host and then sent to every player in the game through the network connection. Since the statistics is stored locally, a player's statistics can follow the player no matter who the player plays with.
+
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/30348433-bc43-40f1-be49-0a4f22b2dfa2)
+A player can also store multiple profiles on their device through modifying the local PlayerRecords. A player can choose which profile to join a game with if the player wants to separate their records from playing with different people.
+
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/9d7ce24c-92eb-43e9-a6e7-78f7970bb22a)
+Here's a menu for extra features on the host's device. When a hand goes wrong, the host can end the hand and disburse the chip in the pot.
+
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/527137a4-5d72-4f58-ab3a-58ca3ef38a55)
+When a host ends a game, every player's winning or loss is calculated and shown.
+
+![image](https://github.com/user-attachments/assets/c1e82554-9628-41ff-b2f7-5fcf0e33e29d)
+Notice a player who is not a host can also choose to leave the game first.
+
+![image](https://github.com/user-attachments/assets/fc376364-a98e-4999-ae82-9670a7304239)
+When a player does leave the game first, the player is shown his winning or loss.
+
+![image](https://github.com/user-attachments/assets/50e335fa-cb19-429d-b7d0-1a5ec737fa2a)
+When the game ends, the player who leaves earlier also has their winning or loss shown.
 
 
 
