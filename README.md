@@ -3,7 +3,7 @@ This app fully simulates the game of Unlimited Texas Hold'em on iOS devices. Wit
 
 ## Screenshots Showing a Complete Game Process
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 48 34](https://github.com/user-attachments/assets/6b434897-9de1-4300-bb1a-1c6db920d142)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 48 34](https://github.com/user-attachments/assets/6b434897-9de1-4300-bb1a-1c6db920d142 | width=100)
 At first, one player can host a game by hitting Host Game. Every player can also decide how much chips to bring into a game through the slider on top.
 
 ![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 28](https://github.com/user-attachments/assets/27e138b8-b9b9-41d9-850f-2b6d1faf3c08)
@@ -76,7 +76,14 @@ When a player does leave the game first, the player is shown his winning or loss
 ![image](https://github.com/user-attachments/assets/50e335fa-cb19-429d-b7d0-1a5ec737fa2a)
 When the game ends, the player who leaves earlier also has their winning or loss shown.
 
+![image](https://github.com/user-attachments/assets/3f988f6a-41ac-460d-ae41-7f76a1f4f324)
+Whenever a mistake is made by selecting the wrong winner of the pot, the host can revert its action by restoring the pot.
 
+![image](https://github.com/user-attachments/assets/8078adb0-f97c-4985-94fb-de8daeb00380)
+After restoring the pot and giving the pot to the correct winner, here's the result.
+
+![image](https://github.com/user-attachments/assets/16d00249-f2c8-47b5-8712-b5a2b0ed63bd)
+Any player can also acquire additional chips by hitting the buy in option in the menu in the top right corner.
 
 
 
