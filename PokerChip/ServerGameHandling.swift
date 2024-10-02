@@ -28,7 +28,6 @@ class ServerGameHandling: ObservableObject {
         self.smallBlind = smallBlind
         self.bigBlind = bigBlind
     }
-    // TODO: HANDLE CALL ALL IN
     
     func fillPositionThree() {
         var idx: Int = dealerIdx

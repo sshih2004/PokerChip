@@ -249,7 +249,7 @@ struct Gameview: View {
                     }
                 }) {
                     Spacer()
-                    Slider(value: $clientRaising, in: 1...Double(truncating: gameVar.chipCount as NSNumber), step: Double(truncating: gameVar.bigBlind as NSNumber))
+                    Slider(value: $clientRaising, in: 1...Double(truncating: gameVar.chipCount as NSNumber), step: 0.5)
                     Text(" \(clientRaising, specifier: "%.2f")")
                     Spacer()
                     Button("Done") {

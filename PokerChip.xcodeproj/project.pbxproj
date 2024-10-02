@@ -44,7 +44,7 @@
 		E4D75A9B2C1DE3B8004D0FD8 /* Gameview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gameview.swift; sourceTree = "<group>"; };
 		E4D75A9D2C1DE64E004D0FD8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		E4D75A9F2C1DE6F9004D0FD8 /* PlayerListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListRow.swift; sourceTree = "<group>"; };
-		E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Poker-Chip-Info.plist"; sourceTree = SOURCE_ROOT; };
+		E4D75AA22C1E2C12004D0FD8 /* PokerChip-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PokerChip-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E4D75AA52C1E2D69004D0FD8 /* PeerListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerListener.swift; sourceTree = "<group>"; };
 		E4D75AB32C1E391C004D0FD8 /* PeerBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerBrowser.swift; sourceTree = "<group>"; };
 		E4D75AB52C1E48B6004D0FD8 /* TestEasyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEasyView.swift; sourceTree = "<group>"; };
@@ -101,7 +101,7 @@
 				E42841272C5C8A1E009C95E2 /* ModifyGameSettingsView.swift */,
 				E4A783F12C630F3D007CEAA2 /* EditPlayerRecordView.swift */,
 				E4D75AA32C1E2D50004D0FD8 /* Networking */,
-				E4D75AA22C1E2C12004D0FD8 /* Poker-Chip-Info.plist */,
+				E4D75AA22C1E2C12004D0FD8 /* PokerChip-Info.plist */,
 				E4D75A9D2C1DE64E004D0FD8 /* Player.swift */,
 				E4D75A9A2C1DE3A1004D0FD8 /* GameViews */,
 				E4D75A8C2C1DE388004D0FD8 /* Poker_ChipApp.swift */,
