@@ -3,7 +3,7 @@ This app fully simulates the game of Unlimited Texas Hold'em on iOS devices. Wit
 
 ## Screenshots Showing a Complete Game Process
 
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/78432137/372704831-6b434897-9de1-4300-bb1a-1c6db920d142.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20241002%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241002T025111Z&X-Amz-Expires=300&X-Amz-Signature=17a988f457ac411e126aec80ad1281154dd8e76331dfb34f9d6ab701069d6577&X-Amz-SignedHeaders=host" width="100>
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 48 34](https://github.com/user-attachments/assets/6b434897-9de1-4300-bb1a-1c6db920d142)
 At first, one player can host a game by hitting Host Game. Every player can also decide how much chips to bring into a game through the slider on top.
 
 ![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 28](https://github.com/user-attachments/assets/27e138b8-b9b9-41d9-850f-2b6d1faf3c08)
