@@ -19,27 +19,34 @@ Other users can hit Search for games to look for any game hosted in the same WiF
 
 Here's an example with 3 players in a game!
 
-![image](https://github.com/user-attachments/assets/4a70105a-fa12-421d-b11b-b4a8816c9331)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 50 15](https://github.com/user-attachments/assets/d2d3578f-3a54-43a3-abd1-6f2e7b2cdebd)
+
 The host can then hit Start, which is exclusive only to the host. Starting a hand and selecting a winner of the pot to transfer chips are exclusive to thhe host of the game.
 Here, we can also see that the first player to act, Player 1, gets to choose from FOLD, CALL, and RAISE. Notice that the name of player to action will blink on the list of players as shown. This will occur on all devices in the same game to let every player know who's to action.
 
-![image](https://github.com/user-attachments/assets/30ad212f-bc5b-4c78-b9bf-995b565b030c)
+![Simulator Screenshot - iPhone 15 Plus - 2024-10-01 at 22 17 40](https://github.com/user-attachments/assets/214bace0-8ef7-4e0c-86dd-e0c7586ed9d9)
+
 Player 1 decides to raise to 5, and Player 2 decides to call. Player 3 can now make a decision as the big blind. If Player 3 re-raises, the round of actions will start again and everyone before Player 3 get another turn to make a decision.
 
-![image](https://github.com/user-attachments/assets/df16adcd-0d43-444b-aec4-cad6d646bf2b)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 22 18 33](https://github.com/user-attachments/assets/122001f4-6dc7-425b-a7c2-c22142e7af66)
+
 As shown here, Player 1 gets another round to make a decision because the wager is now 15 but not 5. Player 1 calls, and Player 2 folds. Therefore, for later rounds, only Player 1 and Player 3 remain in game and Player 2 is skipped because Player 2 has folded.
 
-![image](https://github.com/user-attachments/assets/c97d098a-1011-4400-ba72-bd9e1a051bd8)
+![Simulator Screenshot - iPhone 15 Plus - 2024-10-01 at 22 18 47](https://github.com/user-attachments/assets/75c7f841-4b64-4f82-9463-eeecee044693)
+
 Here, Player 3 is expected to action because Player 2 has folded. Therefore, since small blind has folded, the first to action becomes next position, which is big blind.
 
 
-![image](https://github.com/user-attachments/assets/29573e06-a43e-4b72-83f3-b0f9cf490792)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 22 19 11](https://github.com/user-attachments/assets/10ccc13b-5950-4572-8d1f-d50fdb4a7ae3)
+
 Just for demonstration purpose here, we assume Player 1 and Player 3 just check all the way till the hand ends. The host of the game can now determine who wins the game and selects the winner.
 
-![image](https://github.com/user-attachments/assets/ab1ed8ac-d084-4aaa-9304-7772d2985ac7)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 22 19 15](https://github.com/user-attachments/assets/d51f15cb-1181-497c-81ab-599487676735)
+
 The host can then select a winner through this menu.
 
-![image](https://github.com/user-attachments/assets/aadecad0-f137-4ab5-a09c-5d0195f00cc4)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 22 19 22](https://github.com/user-attachments/assets/7ec27b12-b347-410d-ae45-1a6fb3c3ea3c)
+
 After a winner is selected, notice how all the chip transfers are completed. Also keep in mind that chip counts of each players are updated instantly after a player makes an action to ensure every player in the game has the most up to date information of each player.
 
 
