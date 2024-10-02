@@ -7,13 +7,16 @@ This app fully simulates the game of Unlimited Texas Hold'em on iOS devices. Wit
 
 At first, one player can host a game by hitting Host Game. Every player can also decide how much chips to bring into a game through the slider on top.
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 28](https://github.com/user-attachments/assets/27e138b8-b9b9-41d9-850f-2b6d1faf3c08)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 28](https://github.com/user-attachments/assets/374748dc-f900-4c07-9aa3-c88c1d5597f0)
+
 After a player starts hosting a game, they then create an empty game room.
 
-![Simulator Screenshot - iPhone 15 Pro Max - 2024-10-01 at 20 49 44](https://github.com/user-attachments/assets/476c8ea2-7932-4cc6-9692-e85139021375)
+![Simulator Screenshot - iPhone 15 Pro Max - 2024-10-01 at 20 49 44](https://github.com/user-attachments/assets/9d4705dd-ec43-42e5-a9b8-f0770429c489)
+
 Other users can hit Search for games to look for any game hosted in the same WiFi network. When the desired game appears, simply click on the name of the host to join the game.
 
-![Simulator Screenshot - iPhone 15 Plus - 2024-10-01 at 20 49 57](https://github.com/user-attachments/assets/555ff9ac-6fad-4712-8bb5-b05bd0f429c3)
+![Simulator Screenshot - iPhone 15 Plus - 2024-10-01 at 20 49 57](https://github.com/user-attachments/assets/1e29ba94-cb5c-4a7e-8c9b-1ca778b579a0)
+
 Here's an example with 3 players in a game!
 
 ![image](https://github.com/user-attachments/assets/4a70105a-fa12-421d-b11b-b4a8816c9331)
@@ -56,34 +59,44 @@ Just like this, Player 2 gets their 28 back.
 
 ## Screenshots Showing Additional Features
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 51 19](https://github.com/user-attachments/assets/61b9d563-906f-4e74-a19e-ed91c5614899)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 51 19](https://github.com/user-attachments/assets/5111034b-3f96-42d3-85d3-f81b1334a163)
+
 The information icon beside each player in the game can bring up this page of statistics of a player. When playing in a game, each player's statistics is available for other players to view. This statistics is stored locally in each player's device persistently with SwiftData. Whenever a player joins a game, the statistics is sent to the host and then sent to every player in the game through the network connection. Since the statistics is stored locally, a player's statistics can follow the player no matter who the player plays with.
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/30348433-bc43-40f1-be49-0a4f22b2dfa2)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/c0593481-1263-4b15-91b7-cd88305d9eb7)
+
 A player can also store multiple profiles on their device through modifying the local PlayerRecords. A player can choose which profile to join a game with if the player wants to separate their records from playing with different people.
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/9d7ce24c-92eb-43e9-a6e7-78f7970bb22a)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 21 30 14](https://github.com/user-attachments/assets/b6c11e7d-4bc8-4c0c-8808-a41377350520)
+
 Here's a menu for extra features on the host's device. When a hand goes wrong, the host can end the hand and disburse the chip in the pot.
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 20 49 02](https://github.com/user-attachments/assets/527137a4-5d72-4f58-ab3a-58ca3ef38a55)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 21 31 02](https://github.com/user-attachments/assets/c06da94d-659c-4de8-9bf6-4a7ff0919608)
+
 When a host ends a game, every player's winning or loss is calculated and shown.
 
-![image](https://github.com/user-attachments/assets/c1e82554-9628-41ff-b2f7-5fcf0e33e29d)
+![Simulator Screenshot - iPhone 15 Pro Max - 2024-10-01 at 21 33 02](https://github.com/user-attachments/assets/2e273ba5-0ecb-4c8a-917c-07b4100ec4c7)
+
 Notice a player who is not a host can also choose to leave the game first.
 
-![image](https://github.com/user-attachments/assets/fc376364-a98e-4999-ae82-9670a7304239)
+![Simulator Screenshot - iPhone 15 Pro Max - 2024-10-01 at 22 07 00](https://github.com/user-attachments/assets/71f473ea-1b58-499c-b96d-26b3843e24be)
+
 When a player does leave the game first, the player is shown his winning or loss.
 
-![image](https://github.com/user-attachments/assets/50e335fa-cb19-429d-b7d0-1a5ec737fa2a)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 21 34 28](https://github.com/user-attachments/assets/2a4e40d2-8928-4245-a32b-4da69ee644db)
+
 When the game ends, the player who leaves earlier also has their winning or loss shown.
 
-![image](https://github.com/user-attachments/assets/3f988f6a-41ac-460d-ae41-7f76a1f4f324)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 22 12 50](https://github.com/user-attachments/assets/e40cdc95-3dc0-4122-b236-431730efd6fc)
+
 Whenever a mistake is made by selecting the wrong winner of the pot, the host can revert its action by restoring the pot.
 
-![image](https://github.com/user-attachments/assets/8078adb0-f97c-4985-94fb-de8daeb00380)
+![Simulator Screenshot - iPhone 15 Pro - 2024-10-01 at 22 13 16](https://github.com/user-attachments/assets/c7efe0fc-aa60-4398-ba19-182e26c133f6)
+
 After restoring the pot and giving the pot to the correct winner, here's the result.
 
-![image](https://github.com/user-attachments/assets/16d00249-f2c8-47b5-8712-b5a2b0ed63bd)
+![Simulator Screenshot - iPhone 15 Pro Max - 2024-10-01 at 22 14 34](https://github.com/user-attachments/assets/0b26a5a1-865c-4453-b24b-5e22597f27f2)
+
 Any player can also acquire additional chips by hitting the buy in option in the menu in the top right corner.
 
 
