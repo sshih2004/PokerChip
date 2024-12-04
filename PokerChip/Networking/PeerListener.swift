@@ -1,3 +1,10 @@
+//
+//  PeerListener.swift
+//  Poker Chip
+//
+//  Created by Steven Shih on 6/15/24.
+//
+
 import Foundation
 import Network
 
@@ -62,6 +69,7 @@ class PeerListener: ObservableObject {
     
     private func handleNewConnection(_ connection: NWConnection) {
         var duplicate: Bool = false
+        // check for duplicate connection
         if !connections.isEmpty {
             for i in 0...connections.count-1 {
                 if connections[i].endpoint == connection.endpoint {
@@ -76,6 +84,17 @@ class PeerListener: ObservableObject {
         connection.stateUpdateHandler = { state in
             switch state {
             case .failed(let error):
+                // edge case: only one player
+                if self.connections.count < 1 {
+                    guard let name = self.gameVar?.playerList.playerList[1].name else {
+                        self.serverGameHandling?.serverEndGame()
+                        return
+                    }
+                    self.gameVar?.playerList.playerList[1].actionStr = "Cash Out: " + String(describing: ((self.gameVar?.playerList.playerList[1].chip)! - (self.gameVar?.playerList.playerList[1].buyIn)!))
+                    self.gameVar!.leftPlayers.playerList.append(self.gameVar!.playerList.playerList[1])
+                    self.gameVar!.playerList.playerList.remove(at: 1)
+                }
+                // find player that left and add to cash out view
                 for i in 0...self.connections.count-1 {
                     if self.connections[i] === connection {
                         guard let name = self.gameVar?.playerList.playerList[i+1].name else {
@@ -112,11 +131,12 @@ class PeerListener: ObservableObject {
                 case .move:
                     self.messages.append("HANDLE MOVE")
                 case .playerList:
-                    print("HI")
+                    print("Server received PlayerList")
                 case .startGame:
                     let decoder = JSONDecoder()
                     do {
                         var player = try decoder.decode(Player.self, from: content!)
+                        // handle duplicate names
                         for i in 0...(self.gameVar?.playerList.playerList.count ?? 0) - 1 {
                             if self.gameVar?.playerList.playerList[i].name == player.name {
                                 let framerMessage = NWProtocolFramer.Message(gameMessageType: .invalid)
@@ -151,12 +171,11 @@ class PeerListener: ObservableObject {
                         print(error.localizedDescription)
                     }
                 case .action:
-                    print("Server side received action request")
+                    print("Error: Server side received action request")
                 case .clientAction:
                     let decoder = JSONDecoder()
                     do {
                         let clientAction = try decoder.decode(ClientAction.self, from: content!)
-                        // TODO: add handle client action
                         let framerMessage = NWProtocolFramer.Message(gameMessageType: .action)
                         let context = NWConnection.ContentContext(identifier: "Action",
                                                                   metadata: [framerMessage])
@@ -177,7 +196,6 @@ class PeerListener: ObservableObject {
                     let decoder = JSONDecoder()
                     do {
                         let clientBuyIn = try decoder.decode(BuyIn.self, from: content!)
-                        // TODO: add handle client action
                         self.serverGameHandling?.handleClientRebuy(rebuy: clientBuyIn)
                         
                     } catch {
@@ -203,7 +221,7 @@ class PeerListener: ObservableObject {
         let context = NWConnection.ContentContext(identifier: "Action",
                                                   metadata: [framerMessage])
         let encoder = JSONEncoder()
-        // Send the app content along with the message.let encoder = JSONEncoder()
+        // send available actions to client
         do {
             let data = try encoder.encode(action)
             connection.send(content: data, contentContext: context, isComplete: true, completion: .idempotent)
@@ -252,14 +270,15 @@ class PeerListener: ObservableObject {
         }
     }
     
-    private func send(message: String) {
-        for connection in self.connections {
-            // Create a message object to hold the command type.
-            let message1 = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
-            let context = NWConnection.ContentContext(identifier: "SelectCharacter",
-                                                      metadata: [message1])
-            // Send the app content along with the message.
-            connection.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
-        }
-    }
+//    MODEL not used
+//    private func send(message: String) {
+//        for connection in self.connections {
+//            // Create a message object to hold the command type.
+//            let message1 = NWProtocolFramer.Message(gameMessageType: .selectedCharacter)
+//            let context = NWConnection.ContentContext(identifier: "SelectCharacter",
+//                                                      metadata: [message1])
+//            // Send the app content along with the message.
+//            connection.send(content: message.data(using: .utf8), contentContext: context, isComplete: true, completion: .idempotent)
+//        }
+//    }
 }

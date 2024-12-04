@@ -40,6 +40,8 @@ class PlayerRecord: Codable {
     }
     
     // all subclasses of the class implement the initializer, if no explicit define, inherit
+    // A subclass might fail to provide the necessary initializer, breaking SwiftData’s ability to instantiate and manage objects dynamically.
+    // need manual encode and decode because @Model adds additional metadata that is not automatically codable
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         playerName = try container.decode(String.self, forKey: .playerName)

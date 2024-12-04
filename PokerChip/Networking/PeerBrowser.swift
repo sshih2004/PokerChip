@@ -1,3 +1,10 @@
+//
+//  PeerBrowser.swift
+//  Poker Chip
+//
+//  Created by Steven Shih on 6/15/24.
+//
+
 import Foundation
 import Network
 
@@ -58,6 +65,7 @@ class PeerBrowser: ObservableObject {
     func handleResults(results: Set<NWBrowser.Result>) {
         self.results = [NWBrowser.Result]()
         for result in results {
+            // check if result.endpoint is NWEndpoint.service
             if case let NWEndpoint.service(name: name, type: _, domain: _, interface: _) = result.endpoint {
                 if name != self.gameVar?.name {
                     self.results.append(result)
@@ -115,7 +123,9 @@ class PeerBrowser: ObservableObject {
                         self.gameVar?.bigBlind = playerList.blinds.last ?? 0
                         for i in 0...(self.gameVar?.playerList.playerList.count)!-1 {
                             if self.gameVar!.playerList.playerList[i].name == self.gameVar?.name {
+                                // get chip from server side
                                 self.gameVar?.chipCount = playerList.playerList[i].chip + playerList.playerList[i].raiseSize
+                                // update SwiftData PlayerRecord, reference type update, therefore persists in SwiftData
                                 self.playerRecord?.update(to: playerList.playerList[i].playerRecord!)
                                 break
                             }

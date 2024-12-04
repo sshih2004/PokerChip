@@ -1,9 +1,9 @@
-/*
-See the LICENSE.txt file for this sample’s licensing information.
-
-Abstract:
-Implement a custom framer protocol to encode game-specific messages over a stream.
-*/
+//
+//  GameProtocol.swift
+//  Poker Chip
+//
+//  Created by Steven Shih on 6/15/24.
+//
 
 import Foundation
 import Network
@@ -170,6 +170,7 @@ extension NWParameters {
         self.defaultProtocolStack.applicationProtocols.insert(gameOptions, at: 0)
     }
     
+    // MARK: the following will be used when implementing point to point encryption of the game
     // Create TLS options using a passcode to derive a preshared key.
     private static func tlsOptions(passcode: String) -> NWProtocolTLS.Options {
         let tlsOptions = NWProtocolTLS.Options()

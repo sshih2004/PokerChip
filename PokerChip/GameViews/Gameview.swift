@@ -141,6 +141,7 @@ struct Gameview: View {
                         }
                     }
                     .if(gameVar.isServer && !gameVar.inGame, transform: { view in
+                        // enable remove player only for server side through view extension if
                         view.onDelete(perform: { indexSet in
                             for idx in indexSet {
                                 serverGameHandling.handleClientLeave(name: gameVar.playerList.playerList[idx].name)
