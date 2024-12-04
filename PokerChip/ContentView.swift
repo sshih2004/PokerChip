@@ -78,7 +78,6 @@ struct ContentView: View {
                 HStack {
                     Spacer()
                     Button("Edit Local Player List") {
-                        // TODO: SwiftData EDIT
                         editPlayerRecordFull = true
                     }
                     .fullScreenCover(isPresented: $editPlayerRecordFull, content: {
@@ -97,7 +96,6 @@ struct ContentView: View {
                     }
                     var playerToSend: PlayerRecord = PlayerRecord(playerName: "INVALID")
                     for playerRecord in playerRecords {
-                        // TODO: Find player and send, figure out updating
                         if playerRecord.playerName == selectionPlayer {
                             playerToSend = playerRecord
                         }
@@ -186,7 +184,6 @@ struct ContentView: View {
                             gameVar.name = selectionPlayer
                             var playerToSend: PlayerRecord = PlayerRecord(playerName: "INVALID")
                             for playerRecord in playerRecords {
-                                // TODO: Find player and send, figure out updating
                                 if playerRecord.playerName == selectionPlayer {
                                     playerToSend = playerRecord
                                 }

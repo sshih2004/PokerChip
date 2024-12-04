@@ -29,6 +29,7 @@ class ServerGameHandling: ObservableObject {
         self.bigBlind = bigBlind
     }
     
+    // This function sets the Dealer, SB, BB and take SB, BB chips away from corresponding players
     func fillPositionThree() {
         var idx: Int = dealerIdx
         for i in 0...2 {
@@ -50,7 +51,9 @@ class ServerGameHandling: ObservableObject {
         gameVar.playerList.pot = gameVar.pot
     }
     
+    // starts a game and checks if every player is eligible
     func startGame() {
+        // check if every player is eligible
         for i in 0...gameVar.playerList.playerList.count - 1 {
             if gameVar.playerList.playerList[i].chip <= 0 {
                 gameVar.invalidPlayerAlert = true
@@ -58,6 +61,7 @@ class ServerGameHandling: ObservableObject {
                 return
             }
         }
+        // only start a game if there are enough people for D, SB, BB
         if gameVar.playerList.playerList.count >= 3 {
             gameVar.undoPot = false
             gameVar.inGame = true
@@ -78,7 +82,7 @@ class ServerGameHandling: ObservableObject {
         }
     }
     
-    
+    // setup server UI
     func handleServerAction(action: Action) {
         gameVar.playerList = action.playerList
         gameVar.buttonCall = action.optionCall
@@ -97,6 +101,7 @@ class ServerGameHandling: ObservableObject {
         return cntPlayingPlayer
     }
     
+    // recursive function that simulates the game of Texas Hold'Em
     func serverHandleClient(action: ClientAction) {
         // print(playerIdx)
         self.gameVar.playerList.playerList[playerIdx].curPlayerAnimation = false
@@ -180,11 +185,13 @@ class ServerGameHandling: ObservableObject {
                     playerIdx += 1
                     playerIdx %= self.gameVar.playerList.playerList.count
                 }
+                // Preflop action starts with UTG
                 if bettingRound >= 4 {
                     playerIdx += 2
                 }
                 playerIdx %= self.gameVar.playerList.playerList.count
                 prevPlayerCount = 0
+                // default bet size for preflop is 1bb
                 bettingSize = bettingRound >= 4 ? bigBlind : 0.0
                 for i in 0...gameVar.playerList.playerList.count - 1 {
                     if !gameVar.playerList.playerList[i].fold {
@@ -192,11 +199,13 @@ class ServerGameHandling: ObservableObject {
                             gameVar.playerList.playerList[i].actionStr = ""
                         }
                     }
+                    // handle each player's pot contribution to determine if there's side pot
                     if bettingRound < 4 {
                         gameVar.playerList.playerList[i].potLimit += gameVar.playerList.playerList[i].raiseSize
                         gameVar.playerList.playerList[i].raiseSize = 0.0
                     }
                 }
+                // preflop action
                 self.serverHandleClient(action: ClientAction(betSize: 0, clientAction: .pending))
             } else {
                 bettingRound = 5
@@ -217,6 +226,7 @@ class ServerGameHandling: ObservableObject {
         }
         self.gameVar.playerList.playerList[playerIdx].curPlayerAnimation = true
         server.sendPlayerList()
+        // determine to request action from client or self
         if playerIdx != 0 {
             // print("Sent request to " + String(playerIdx))
             server.requestAction(idx: playerIdx - 1, action: Action(playerList: gameVar.playerList, betSize: bettingSize, optionCall: bettingSize == self.gameVar.playerList.playerList[playerIdx].raiseSize, optionRaise: bettingSize >= self.gameVar.playerList.playerList[playerIdx].chip + self.gameVar.playerList.playerList[playerIdx].raiseSize, optionCheck: bettingSize != self.gameVar.playerList.playerList[playerIdx].raiseSize, optionFold: false))
@@ -292,7 +302,6 @@ class ServerGameHandling: ObservableObject {
         gameVar.selectWinner = false
     }
     
-    // Maybe figure out buy in restrictions
     func handleServerRebuy(rebuy: Decimal) {
         self.gameVar.playerList.playerList[0].chip += rebuy
         self.gameVar.playerList.playerList[0].buyIn += rebuy

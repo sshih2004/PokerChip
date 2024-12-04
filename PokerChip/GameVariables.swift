@@ -34,7 +34,7 @@ class GameVariables: ObservableObject {
     @Published var invalidPlayerAlert: Bool = false
     @Published var invalidPlayerNameClientAlert: Bool = false
     var pending: Bool = false
-    let pendingCondition = NSCondition()
+    //let pendingCondition = NSCondition()
     var curAction: Action?
     var pot: Decimal = 0.0
     var potReset: Decimal = 0.0

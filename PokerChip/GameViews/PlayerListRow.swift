@@ -15,7 +15,7 @@ struct PlayerListRow: View {
         VStack {
             HStack {
                 Text(player.name)
-                    .frame(width: 50, alignment: .leading)
+                    .frame(width: 55, alignment: .leading)
                 Text("Chip: " + String(describing: player.chip))
                     .frame(width: 100, alignment: .leading)
                 Spacer()
